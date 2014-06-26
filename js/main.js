@@ -4,7 +4,7 @@
 
 	$(function () {
 
-		var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'bump', 'bootState', true);
+		var game = new Phaser.Game(1280, 720, Phaser.CANVAS, 'bump', 'bootState', true);
 		game.state.add('bootState' , BootState);
 		game.state.add('gameState' , GameState);
 		//game.state.start('Boot');
