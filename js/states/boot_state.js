@@ -1,5 +1,4 @@
 var BootState = (function () {
-
 	var BootState = function(game, x, y, asset, frame) {
 	  Phaser.State.call(this, game);
 	}
@@ -8,13 +7,14 @@ var BootState = (function () {
 	BootState.prototype.constructor = BootState;
 
 	BootState.prototype.preload = function () {
-		game.load.image('player', 'assets/images/circle.png');
+		this.game.load.image('player', 'assets/images/circle.png');
+		this.game.stage.backgroundColor = "#1192bd";
 	};
 
 	BootState.prototype.create = function () {
-    var style = { font: "65px Arial", fill: "#ff0044", align: "center" };
-    var t = game.add.text(game.world.centerX-300, 0, 'hello world', style);
+		this.game.state.start("setupState");
 
+        // game.stage.setBackgroundColor(0x1192bd);
 	}
 
 	return BootState;
