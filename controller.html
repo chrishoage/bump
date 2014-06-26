@@ -11,23 +11,87 @@
     		<style>
 					#controller {
 						background: red;
+						display:-ms-flexbox;
+						-ms-flex-pack:center;
+						-ms-flex-align:center;
+
+						/* Firefox */
+						display:-moz-box;
+						-moz-box-pack:center;
+						-moz-box-align:center;
+
+						/* Safari, Opera, and Chrome */
+						display:-webkit-box;
+						-webkit-box-pack:center;
+						-webkit-box-align:center;
+
+					}
+					#setup {
+						font-family: Arial;
+						color: #FFF;
+						/* Internet Explorer 10 */
+						display:-ms-flexbox;
+						-ms-flex-pack:center;
+						-ms-flex-align:center;
+
+						/* Firefox */
+						display:-moz-box;
+						-moz-box-pack:center;
+						-moz-box-align:center;
+
+						/* Safari, Opera, and Chrome */
+						display:-webkit-box;
+						-webkit-box-pack:center;
+						-webkit-box-align:center;
+
+						/* W3C */
+						display:box;
+						box-pack:center;
+						box-align:center;
+
+						/* Safari */
+						-webkit-transform: rotate(-90deg);
+
+						/* Firefox */
+						-moz-transform: rotate(-90deg);
+
+						/* IE */
+						-ms-transform: rotate(-90deg);
+
+						/* Opera */
+						-o-transform: rotate(-90deg);
+
+						/* Internet Explorer */
+						filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+
 					}
     		</style>
     </head>
     <body>
 			<!-- Modal -->
-		<div id="controller"></div>
+		<div id="controller">
+			<div id="setup">Hold this right side up for normal, upside down for inverted. Tap screen when ready.</div>
+		</div>
+		<script>
+			// I want this to fire before everything else loads
+			var $controller = document.getElementById('controller');
+
+			var setSize = function () {
+				$controller.style.width = window.innerWidth+'px';
+				$controller.style.height = window.innerHeight+'px';
+			}
+
+			setSize();
+		</script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 		<script src="http://cdn.peerjs.com/0.3/peer.min.js"></script>
 		<script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
 		<script>
-			$(function() {
-				var $controller = $('#controller');
-				var $body = $(document.body);
-				var $window = $(window);
-				$controller.width($window.width());
-				$controller.height($window.height());
+			window.addEventListener('load', function () {
+				var $body = document.body;
+
+
 				var peer = new Peer({key: 'h35ea8mmmurw9udi'});
 
 				var orientation = function () {
@@ -52,8 +116,7 @@
 				};
 
 				var fixController = function(event) {
-					$controller.width($window.width());
-					$controller.height($window.height());
+					setSize();
 					var lockOrientation = screen.lockOrientation || screen.mozLockOrientation || screen.msLockOrientation;
 
 					if (lockOrientation) {
@@ -68,14 +131,15 @@
 					var connectTo = null;
 					var started = false;
 					if (location.hash) connectTo = location.hash.slice(1);
-					if (!connectTo) return;
+					if (!connectTo) return alert('Error: No Connection Code Supplied');
 					var conn = peer.connect(connectTo);
+					if (!conn) return alert('Error: There was an error connecting to the game');
 					conn.on('open', function () {
-						$('#controller').on('click', function (event) {
+						$controller.addEventListener('click', function (event) {
 							var el = document.documentElement,
 									rfs = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen;
 							rfs.call(el);
-							$(this).css('background', 'green');
+							this.style.background = 'green';
 							window.addEventListener('devicemotion', function(event) {
 								event.preventDefault();
 								var xyz = function (o) {
@@ -91,10 +155,10 @@
 									timeStamp: event.timeStamp
 								});
 						}, true);
-						});
+						}, true);
 					});
 				});
-			});
+			}, true);
 
 		</script>
     </body>

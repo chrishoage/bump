@@ -11,6 +11,7 @@
 			game.state.add('preloadState' , PreloadState);
 			game.state.add('setupState' , SetupState);
 			game.state.add('gameState' , GameState);
+			console.log(game);
 		});
 
 	}, true);
