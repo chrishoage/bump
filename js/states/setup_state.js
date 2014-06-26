@@ -17,10 +17,10 @@ var SetupState = (function () {
 	SetupState.prototype.create = function () {
     var style = { font: "65px Arial", fill: "#ff0044", align: "center" };
     var t = this.game.add.text(this.game.world.centerX-300, 0, 'Bump!', style);
-    this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'qr-code');
+    this.game.add.sprite(this.game.world.centerX, 10, 'qr-code');
     var _this = this;
     peer.on('connection', function (conn) {
-    	var player = new PlayerOne(_this.game, _this.game.world.centerX, 256*window.players.length);
+    	var player = new PlayerOne(_this.game, 256*window.players.length, _this.game.world.centerY);
     	player.peerConn = conn;
     	window.players.push(player);
     	_this.game.add.existing(player);

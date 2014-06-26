@@ -10,6 +10,7 @@
 			game.state.add('bootState' , BootState);
 			game.state.add('setupState' , SetupState);
 			game.state.add('gameState' , GameState);
+			console.log(game);
 		});
 
 	}, true);
