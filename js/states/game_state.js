@@ -24,8 +24,8 @@ var GameState = (function () {
 			console.log('connection', conn);
 			player.x = (game.width / 2) - (player.width / 2);
 			player.y = (game.height / 2) - (player.height / 2);
-			player.body.acceleration.x = 0;
-			player.body.acceleration.y = 0;
+			//player.body.acceleration.x = 0;
+			//player.body.acceleration.y = 0;
 			$('#qr-modal').modal('hide');
 			conn.on('data', function (data) {
 				var movementSpeed = 25;
@@ -35,11 +35,11 @@ var GameState = (function () {
 					y: data.orientation ? aig.y : aig.x
 				}
 
-				player.x += (delta.x  / 10) * movementSpeed;
-				player.y += (delta.y  / 10) * movementSpeed;
+				player.body.velocity.x += (delta.x  / 10) * movementSpeed;
+				player.body.velocity.y += (delta.y  / 10) * movementSpeed;
 
-				player.body.acceleration.x = Math.abs(delta.x) > 0 ? 25 : 0;
-				player.body.acceleration.y = Math.abs(delta.y) > 0 ? 25 : 0;
+				//player.body.acceleration.x = Math.abs(delta.x) > 0 ? 25 : 0;
+				//player.body.acceleration.y = Math.abs(delta.y) > 0 ? 25 : 0;
 
 				if (player.x < -player.width/2) {
 				  player.x = -player.width/2;
