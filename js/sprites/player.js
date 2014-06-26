@@ -25,7 +25,7 @@ var Player = (function () {
 				// device motion stuff here
 			}
 		});
-	});
+	};
 
 	return Player;
 
