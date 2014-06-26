@@ -6,15 +6,22 @@ var BootState = (function () {
 	BootState.prototype = Object.create(Phaser.State.prototype);
 	BootState.prototype.constructor = BootState;
 
+	BootState.prototype.loaderFull = Phaser.Sprite;
+	BootState.prototype.loaderEmpty = Phaser.Spirte;
+
 	BootState.prototype.preload = function () {
-		this.game.load.image('player', 'assets/images/circle.png');
-		this.game.stage.backgroundColor = "#1192bd";
+		console.log("preloading loader assets");
+		
+		this.game.load.image('loaderEmpty', 'assets/images/loader_empty.png');
+		this.game.load.image('loaderFull', 'assets/images/loader_full.png');
+
+		// setup random game options
+		this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+		this.game.stage.disableVisibilityChange = true;
 	};
 
 	BootState.prototype.create = function () {
-		this.game.state.start("setupState");
-
-        // game.stage.setBackgroundColor(0x1192bd);
+		this.game.state.start("preloadState");
 	}
 
 	return BootState;
