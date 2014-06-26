@@ -27,13 +27,19 @@ var SetupState = (function () {
     this.game.add.sprite(100, 10, 'qr-code');
     var _this = this;
     peer.on('connection', function (conn) {
-    	var player = new PlayerOne(_this.game, 256*window.players.length, _this.game.world.centerY);
+    	var player = new PlayerOne(_this.game, 256*_this.players.length, _this.game.world.centerY);
     	player.setupConnection(conn);
     	_this.players.push(player);
     	_this.game.add.existing(player);
     });
 
 	}
+
+	SetupState.prototype.update = function () {
+		if (this.players.length && _.every(this.players, 'playerReady')) {
+			this.game.state.start("gameState");
+		}
+	};
 
 	return SetupState;
 
