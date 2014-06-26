@@ -12,6 +12,8 @@ var BootState = (function () {
 	};
 
 	BootState.prototype.create = function () {
+    var style = { font: "65px Arial", fill: "#ff0044", align: "center" };
+    var t = game.add.text(game.world.centerX-300, 0, 'hello world', style);
 
 	}
 
