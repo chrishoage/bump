@@ -7,7 +7,7 @@ var PlayerOne = (function () {
 	  Player.call(this, game, x, y, asset, frame);
 	}
 
-	PlayerOne.prototype = Object.create(Phaser.Sprite.prototype);
+	PlayerOne.prototype = Object.create(Player.prototype);
 	PlayerOne.prototype.constructor = PlayerOne;
 
 	return PlayerOne;
