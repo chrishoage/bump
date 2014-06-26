@@ -1,6 +1,8 @@
 var SetupState = (function () {
 
 	var SetupState = function(game, x, y, asset, frame) {
+    this.players = [];
+
 	  Phaser.State.call(this, game);
 	}
 
@@ -15,6 +17,7 @@ var SetupState = (function () {
 	};
 
 	SetupState.prototype.create = function () {
+
     var style = { font: "65px Arial", fill: "#ff0044", align: "center" };
     var smallStyle = { font: "35px Arial", fill: "#ff0044", align: "left" };
 
@@ -26,9 +29,8 @@ var SetupState = (function () {
     peer.on('connection', function (conn) {
     	var player = new PlayerOne(_this.game, 256*window.players.length, _this.game.world.centerY);
     	player.peerConn = conn;
-    	window.players.push(player);
+    	_this.players.push(player);
     	_this.game.add.existing(player);
-
     });
 
 	}

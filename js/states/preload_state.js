@@ -33,7 +33,7 @@ var PreloadState = (function () {
 	PreloadState.prototype.createTopLogo = function() {
 		var text = null;
 		var textReflect = null;
-
+		
 		text = this.game.add.text(this.game.world.centerX, this.game.world.centerY/3, "BUMP");
 
 	    //  Centers the text

@@ -1,7 +1,6 @@
 (function () {
 
 	this.peer = new Peer({key: 'h35ea8mmmurw9udi'});
-	this.players = [];
 	document.addEventListener('load', function () {
 
 		// wati till peer.js connects to start the game, it wont work with out it anyway

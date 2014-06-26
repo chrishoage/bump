@@ -11,11 +11,15 @@ var GameState = (function () {
 	};
 
 	GameState.prototype.create = function () {
+		this.createPlayers();
+		
+	};
+
+	GameState.prototype.createPlayers= function () {
 		var player = new PlayerOne(this.game);
 
 		this.game.physics.enable(player, Phaser.Physics.ARCADE);
 		player.body.maxVelocity.setTo(100, 100); // x, y
-
 
 		game.add.existing(player);
 		console.log(player);
@@ -57,7 +61,6 @@ var GameState = (function () {
 				}
 			});
 		});
-
 	}
 
 	return GameState;
