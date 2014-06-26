@@ -28,13 +28,8 @@ var SetupState = (function () {
     var _this = this;
     peer.on('connection', function (conn) {
     	var player = new PlayerOne(_this.game, 256*window.players.length, _this.game.world.centerY);
-<<<<<<< HEAD
     	player.setupConnection(conn);
-    	window.players.push(player);
-=======
-    	player.peerConn = conn;
     	_this.players.push(player);
->>>>>>> e75a158bda0fb346b1948f8f8883bd02b3bebce7
     	_this.game.add.existing(player);
     });
 
