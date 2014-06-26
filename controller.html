@@ -83,8 +83,6 @@
 
 			setSize();
 		</script>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 		<script src="http://cdn.peerjs.com/0.3/peer.min.js"></script>
 		<script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
 		<script>
@@ -140,6 +138,10 @@
 									rfs = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen;
 							rfs.call(el);
 							this.style.background = 'green';
+							conn.send({
+								type: 'click',
+								timeStamp: event.timeStamp
+							})
 							window.addEventListener('devicemotion', function(event) {
 								event.preventDefault();
 								var xyz = function (o) {
@@ -147,6 +149,7 @@
 								};
 
 								conn.send({
+									type: 'devicemotion',
 									acceleration: xyz(event.acceleration),
 									accelerationIncludingGravity: xyz(event.accelerationIncludingGravity),
 									rotationRate: _.pick(event.rotationRate, ['alpha', 'beta', 'gamma']),
