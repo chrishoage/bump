@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+				<script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.1/modernizr.min.js"></script>
+    		<style>
+					#controller {
+						background: red;
+					}
+    		</style>
+    </head>
+    <body>
+			<!-- Modal -->
+		<div id="controller"></div>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+		<script src="http://cdn.peerjs.com/0.3/peer.min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+		<script>
+			$(function() {
+				var $controller = $('#controller');
+				var $body = $(document.body);
+				var $window = $(window);
+				$controller.width($window.width());
+				$controller.height($window.height());
+				var peer = new Peer({key: 'h35ea8mmmurw9udi'});
+
+				var orientation = function () {
+					var o = 0;
+
+					if (window.orientation) {
+						o = window.orientation;
+					} else if (screen.mozOrientation) {
+						switch (screen.mozOrientation) {
+							case 'landscape-primary':
+							case 'landscape-secondary':
+							case 'landscape':
+								o = 90;
+								break;
+							default:
+								o = 0;
+								break;
+						}
+					}
+
+					return o;
+				};
+
+				var fixController = function(event) {
+					$controller.width($window.width());
+					$controller.height($window.height());
+					var lockOrientation = screen.lockOrientation || screen.mozLockOrientation || screen.msLockOrientation;
+
+					if (lockOrientation) {
+						lockOrientation('landscape');
+					};
+				}
+				window.addEventListener('resize', fixController, false);
+				window.addEventListener('orientationchange', fixController, false);
+				window.addEventListener('mozorientationchange', fixController, false);
+
+				peer.on('open', function(id) {
+					var connectTo = null;
+					var started = false;
+					if (location.hash) connectTo = location.hash.slice(1);
+					if (!connectTo) return;
+					var conn = peer.connect(connectTo);
+					conn.on('open', function () {
+						$('#controller').on('click', function (event) {
+							var el = document.documentElement,
+									rfs = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen;
+							rfs.call(el);
+							$(this).css('background', 'green');
+							window.addEventListener('devicemotion', function(event) {
+								event.preventDefault();
+								var xyz = function (o) {
+									return _.pick(o, ['x', 'y', 'z']);
+								};
+
+								conn.send({
+									acceleration: xyz(event.acceleration),
+									accelerationIncludingGravity: xyz(event.accelerationIncludingGravity),
+									rotationRate: _.pick(event.rotationRate, ['alpha', 'beta', 'gamma']),
+									interval: event.interval,
+									orientation: orientation(),
+									timeStamp: event.timeStamp
+								});
+						}, true);
+						});
+					});
+				});
+			});
+
+		</script>
+    </body>
+</html>
