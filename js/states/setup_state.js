@@ -21,11 +21,11 @@ var SetupState = (function () {
     var t = this.game.add.text(0, 0, 'Bump!', style);
     var t = this.game.add.text(0, 100, 'Use the QR Code to connect\nyour phone to use as a controller.\nRemember to lock your device orentation!', smallStyle);
 
-    this.game.add.sprite(this.game.world.width-100, 10, 'qr-code');
+    this.game.add.sprite(100, 10, 'qr-code');
     var _this = this;
     peer.on('connection', function (conn) {
     	var player = new PlayerOne(_this.game, 256*window.players.length, _this.game.world.centerY);
-    	player.peerConn = conn;
+    	player.setupConnection(conn);
     	window.players.push(player);
     	_this.game.add.existing(player);
 
