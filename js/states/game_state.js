@@ -8,7 +8,6 @@ var GameState = (function () {
 	GameState.prototype.constructor = GameState;
 
 	GameState.prototype.preload = function () {
-		game.load.image('player', 'assets/images/circle.png');
 	};
 
 	GameState.prototype.create = function () {
