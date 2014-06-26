@@ -12,16 +12,23 @@ var GameState = (function () {
 	};
 
 	GameState.prototype.create = function () {
-		var player = new Player(this.game, 256, 256, 'player');
+		var player = new PlayerOne(this.game);
+
+		this.game.physics.enable(player, Phaser.Physics.ARCADE);
+		player.body.maxVelocity.setTo(100, 100); // x, y
+
+
 		game.add.existing(player);
 		console.log(player);
 		peer.on('connection', function (conn) {
 			console.log('connection', conn);
 			player.x = (game.width / 2) - (player.width / 2);
 			player.y = (game.height / 2) - (player.height / 2);
+			player.body.acceleration.x = 0;
+			player.body.acceleration.y = 0;
 			$('#qr-modal').modal('hide');
 			conn.on('data', function (data) {
-				var movementSpeed = 5;
+				var movementSpeed = 25;
 				var aig = data.accelerationIncludingGravity;
 				var delta = {
 					x: data.orientation ? aig.x : aig.y,
@@ -30,6 +37,9 @@ var GameState = (function () {
 
 				player.x += (delta.x  / 10) * movementSpeed;
 				player.y += (delta.y  / 10) * movementSpeed;
+
+				player.body.acceleration.x = Math.abs(delta.x) > 0 ? 25 : 0;
+				player.body.acceleration.y = Math.abs(delta.y) > 0 ? 25 : 0;
 
 				if (player.x < -player.width/2) {
 				  player.x = -player.width/2;
@@ -46,8 +56,6 @@ var GameState = (function () {
 				if (player.y > game.height - player.height/2) {
 				  player.y = game.height - player.height/2;
 				}
-
-				console.log(data);
 			});
 		});
 
