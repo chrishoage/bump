@@ -1,21 +1,17 @@
 (function () {
 
 	this.peer = new Peer({key: 'h35ea8mmmurw9udi'});
+	this.players = [];
+	document.addEventListener('load', function () {
 
-	$(function () {
-
-		var game = new Phaser.Game(1280, 720, Phaser.CANVAS, 'bump', 'bootState', true);
-		game.state.add('bootState' , BootState);
-		game.state.add('gameState' , GameState);
-		//game.state.start('Boot');
-
-		window.game = game;
-
+		// wati till peer.js connects to start the game, it wont work with out it anyway
 		peer.on('open', function(id) {
-			//$('#qr-code').qrcode('http://' + location.host + '/controller.html#' + id);
-			//$('#qr-modal').modal('toggle');
+			var game = new Phaser.Game(1280, 720, Phaser.CANVAS, 'bump', 'bootState', true);
+			game.state.add('bootState' , BootState);
+			game.state.add('setupState' , SetupState);
+			game.state.add('gameState' , GameState);
 		});
 
-	});
+	}, true);
 
 }).call(this);
