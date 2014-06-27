@@ -64,7 +64,7 @@ var Player = (function () {
         
 		console.log(theta);
 		this.body.rotation = theta;
-		this.body.thrust(distance);
+		this.body.thrust(distance*10);
 		
 		if (this.x < -this.width/2) {
 		  this.x = -this.width/2;
