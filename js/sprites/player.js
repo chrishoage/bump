@@ -109,7 +109,7 @@ var Player = (function () {
 
 	Player.prototype.update = function () {
 		this.bar.clear();
-		if (this.alive) {
+		if (this.lives > 0) {
 			var size = 80 * (this.cooldownTimeLeft / 15);
 			var posX = this.game.world.width - 100 - (125 * this.i);
 			this.createCooldownBar(posX, size, this.barColor);
@@ -127,10 +127,17 @@ var Player = (function () {
 			scaleDown.onComplete.add(function () {
 				// respawn
 				this.scale.x = this.scale.y = 1;
-				this.body.x = this.game.rnd.integerInRange(saferect.left, saferect.right);
-				this.body.y = this.game.rnd.integerInRange(saferect.top, saferect.bottom);
+
+				this.respawn();
 			}, this);
 		}
+	};
+
+	Player.prototype.respawn = function () {
+		var saferect = this.game.state.states["gameState"].safeRectangle;
+
+		this.body.x = this.game.rnd.integerInRange(saferect.left, saferect.right);
+		this.body.y = this.game.rnd.integerInRange(saferect.top, saferect.bottom);
 	};
 
 	return Player;

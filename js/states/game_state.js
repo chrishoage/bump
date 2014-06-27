@@ -211,16 +211,22 @@ var GameState = (function () {
 
 		// determine if game over
 		var anyAlive = false;
-		_(this.players).forEach(function (player) {
-			if (player.alive) {
+		_(player.game.state.states['gameState'].players).forEach(function (thisPlayer) {
+			if (thisPlayer.lives > 0) {
 				anyAlive = true;
 			}
 		});
 
 		if (anyAlive === false) {
 			console.log('gameover');
+			var gameover = player.game.add.sprite(player.game.world.centerX-10,  player.game.world.centerY-50, 'game-over');
+	    gameover.anchor.set(0.5);
+
+	    player.game.add.tween(gameover).from({y:-600},1000,Phaser.Easing.Bounce.Out,true, 100, false, false);
 		}
 	};
+
+
 
 	return GameState;
 
