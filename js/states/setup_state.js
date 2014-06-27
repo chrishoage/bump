@@ -67,6 +67,11 @@ var SetupState = (function () {
 
     });
 
+
+    // TODO remove only for debugging
+    this.game.input.onDown.add(function() {
+      this.game.state.start("gameState");
+    }, this);
 	}
 
 	SetupState.prototype.update = function () {
