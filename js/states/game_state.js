@@ -10,6 +10,8 @@ var GameState = (function () {
 		this.top_right_land = null;
 		this.landElements = [];
 
+		this.gameOver = false;
+
 	  Phaser.State.call(this, game);
 
 	}
@@ -198,12 +200,13 @@ var GameState = (function () {
 
 	GameState.prototype.playerHitsLand = function (player, land) {
 		var _this = player.game.state.states['gameState'];
-		if (player.sprite.isDead) return;
+		if (player.sprite.isDead || _this.gameOver) return;
 		console.log("player hit land", player);
 		player.sprite.loseLife(function () {
 			// determine if game over
 			var winner = _.where(_this.players, {'isDead': false});
 			if (winner.length <= 1) {
+  	  	_this.gameOver = true;
 				console.log('gameover');
 				var gameover = player.game.add.sprite(player.game.world.centerX-10,  player.game.world.centerY-10, 'game-over');
 	  	  gameover.anchor.set(0.5);
