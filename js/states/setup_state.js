@@ -31,8 +31,8 @@ qrHost = this.game.add.sprite(this.game.world.centerX-10,  this.game.world.cente
        qrHost.anchor.set(0.5);      this.game.add.tween(qrHost).from({y:-600},1500,Phaser.Easing.Bounce.Out,true, 100, false, false);
         
     var qrSprite = this.game.add.sprite(this.game.world.centerX-43, 417, 'qr-code');
-        qrSprite.crop(new Phaser.Rectangle(0,0,87,87));                      
-        qrSprite.alpha(0);
+        qrSprite.crop(new Phaser.Rectangle(0,0,87,87));                    
+        qrSprite.alpha=0;
     this.game.add.tween(qrSprite).to({alpha:1}, 1000, Phaser.Easing.Linear.None, 1600, false, false);
         
     var _this = this;
