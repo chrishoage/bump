@@ -141,7 +141,7 @@
 							rfs.call(el);
 							this.style.background = 'green';
 							conn.send({
-								type: 'click',
+								type: 'start',
 								timeStamp: event.timeStamp
 							});
 							window.addEventListener('click', function (event) {
@@ -149,7 +149,7 @@
 										type: 'click',
 										timeStamp: event.timeStamp
 									});
-							}, false);
+							}, true);
 							window.addEventListener('devicemotion', function(event) {
 								event.preventDefault();
 								var xyz = function (o) {

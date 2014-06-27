@@ -8,9 +8,11 @@ var Player = (function () {
 
 	  this.playerReady = false;
 
-		this.movementSpeed = 50;
+		this.movementSpeed = 10;
+		this.rotationRate = 15;
 
-
+		this.playerPowerUpActive = false;
+		this.playerPowerUpCooldown = false;
 	}
 
 	Player.prototype = Object.create(Phaser.Sprite.prototype);
@@ -24,10 +26,9 @@ var Player = (function () {
 				if (_this.playerReady) {
 					_this.triggerPowerUp();
 					// trigger player power
-					console.log('power triggered', data)
-				} else {
-					_this.playerReady = true;
 				}
+			} else if (data.type === 'start') {
+					_this.playerReady = true;
 			} else if (data.type === 'devicemotion') {
 				// device motion stuff here
 				_this.movePlayer(data);
@@ -41,51 +42,51 @@ var Player = (function () {
 			x: data.orientation ? aig.x : aig.y,
 			y: data.orientation ? aig.y : aig.x
 		}
-		var theta;
-
 		/*this.body.velocity.x += (accel.x  / 10) * this.movementSpeed;
 		this.body.velocity.y += (accel.y  / 10) * this.movementSpeed;*/
 
-		var distance;
-
 		//logic to calculate the tilt value of the accelerometer (0-10)
-		distance = Math.sqrt(accel.x*accel.x + accel.y*accel.y);
-		distance = distance * 10;
+		var distance = Math.sqrt(accel.x*accel.x + accel.y*accel.y) * this.movementSpeed;
+
+
 		var vel = this.body.velocity;
 		var speed = Math.sqrt(vel.x*vel.x + vel.y*vel.y);
 
-		var rotationRate = 15;
 		//logic to calculate the angle from accelerometer data
 		var rotating = (Math.abs(accel.x) > 5);
 		if(accel.x>0 && accel.y>0) {
 		  this.body.reverse(distance);
-		  if(rotating) this.body.rotateRight(rotationRate)
+		  if(rotating) this.body.rotateRight(this.rotationRate)
 		}else if(accel.x<0 && accel.y>0) {
-		  if(rotating) this.body.rotateLeft(rotationRate)
+		  if(rotating) this.body.rotateLeft(this.rotationRate)
 		  this.body.reverse(distance);
 		}else if(accel.x<0 && accel.y<0) {
-		  if(rotating) this.body.rotateLeft(rotationRate)
+		  if(rotating) this.body.rotateLeft(this.rotationRate)
 		  this.body.thrust(distance)
 		}else if(accel.x>0 && accel.y<0) {
-		   if(rotating) this.body.rotateRight(rotationRate)
+		   if(rotating) this.body.rotateRight(this.rotationRate)
 		   this.body.thrust(distance)
 		}
-		// if ((this.body.rotation - theta) > 0) {
-		// 	this.body.rotateLeft(100)
-		// } else {
-		// 	this.body.rotateRight(100)
-		// }
-		//this.body.rotation = theta;
-		//this.body.thrust(distance*10);
 
 	};
 
 	Player.prototype.triggerPowerUp = function () {
 		// sub for Players
-		this.playerPowerUp = true;
+		if (this.playerPowerUpCooldown) return;
+		this.playerPowerUpActive = true;
+		console.log('power up triggered')
 		this.game.time.events.add(Phaser.Timer.SECOND * 4, function() {
-
+			console.log('power up over')
+			this.playerPowerUpActive = false;
+			this.playerPowerUpCooldown = true;
+			console.log('cool down started')
+			this.game.time.events.add(Phaser.Timer.SECOND * 15, function() {
+				this.playerPowerUpActive = false;
+				this.playerPowerUpCooldown = false;
+				console.log('cool down over');
+			}, this);
 		}, this);
+
 	};
 
 	return Player;
