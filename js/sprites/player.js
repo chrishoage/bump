@@ -22,7 +22,9 @@ var Player = (function () {
 		this.peerConn.on('data', function (data) {
 			if (data.type === 'click') {
 				if (_this.playerReady) {
+					_this.triggerPowerUp();
 					// trigger player power
+					console.log('power triggered', data)
 				} else {
 					_this.playerReady = true;
 				}
@@ -80,6 +82,14 @@ var Player = (function () {
 		  this.y = this.game.height - this.height/2;
 		}
 
+	};
+
+	Player.prototype.triggerPowerUp = function () {
+		// sub for Players
+		this.playerPowerUp = true;
+		game.time.events.add(Phaser.Timer.SECOND * 4, function() {
+
+		}, this);
 	};
 
 	return Player;

@@ -10,7 +10,7 @@ var PreloadState = (function () {
 		console.log("preloading assets");
 
     // used to randomize sides used
-    this.numberLandSides = 1;
+    this.numberLandSides = 8;
 
 		this.loaderEmpty = this.game.add.sprite(this.game.world.centerX, 200, 'loaderEmpty');
     this.preloadBar = this.game.add.sprite(this.loaderEmpty.x - this.loaderEmpty.width/2, 200, 'loaderFull');
@@ -27,6 +27,11 @@ var PreloadState = (function () {
     this.game.load.image('land-bottom-right', 'assets/images/land/bottom-right.png');
     this.game.load.image('land-top-left', 'assets/images/land/top-left.png');
     this.game.load.image('land-top-right', 'assets/images/land/top-right.png');
+
+    for (var i = 1; i <= numberLandSides; i++) {
+      
+    }
+
     this.game.load.image('land-side', 'assets/images/land/side.png');
 
     this.game.load.image('cool-down-empty', 'assets/images/cool-down-empty.png');
