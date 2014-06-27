@@ -56,7 +56,7 @@ var SetupState = (function () {
 
     peer.on('connection', function (conn) {
     	var PlayerObject = playerObjects.shift();
-    	var player = new PlayerObject(_this.game, 256*_this.players.length, _this.game.world.centerY);
+    	var player = new PlayerObject(_this.game, 100*_this.players.length, _this.game.world.centerY);
     	console.log(player);
     	player.setupConnection(conn);
     	_this.players.push(player);
