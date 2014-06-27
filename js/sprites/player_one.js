@@ -10,6 +10,13 @@ var PlayerOne = (function () {
 	PlayerOne.prototype = Object.create(Player.prototype);
 	PlayerOne.prototype.constructor = PlayerOne;
 
+	PlayerOne.prototype.update = function () {
+		if (this.playerPowerUpActive && !this.playerPowerUpCooldown) {
+			console.log('power up active')
+			this.body.setZeroVelocity();
+		}
+	};
+
 	return PlayerOne;
 
 }).call(this);

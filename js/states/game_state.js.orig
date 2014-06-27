@@ -60,6 +60,7 @@ var GameState = (function () {
 		this.top_right_land.body.clearShapes();
 		this.top_right_land.body.loadPolygon('physicsDataCorners', 'land-top-right');
 
+<<<<<<< HEAD
 		this.top_right_land.body.motionState = 
 		this.top_left_land.body.motionState = 
 		this.bottom_right_land.body.motionState = 
@@ -67,6 +68,20 @@ var GameState = (function () {
 
 		var starting_x = 300;
 		var starting_y = 100;
+=======
+		this.top_right_land.body.motionState =
+		this.top_left_land.body.motionState =
+		this.bottom_right_land.body.motionState =
+		this.bottom_left_land.body.motionState =
+			Phaser.Physics.P2.Body.STATIC;
+	};
+
+	GameState.prototype.update = function () {
+		_.each(this.players, function (player) {
+			/*player.body.thrust(100);*/
+			//this.game.physics.arcade.collide(player, this.players);
+		}, this);
+>>>>>>> ed727cd360712003677bbdd3676cabd5eaa65583
 
 		// fill in top side
 		var newSprite = null;

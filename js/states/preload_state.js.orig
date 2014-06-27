@@ -35,7 +35,11 @@ var PreloadState = (function () {
     this.game.load.image('land-filler-side-h', 'assets/images/land/filler-side-h.png');
 
     for (var i = 1; i <= this.numberLandSides; i++) {
+<<<<<<< HEAD
       this.game.load.image('land-side-'+ i, 'assets/images/land/side-' + i + '.png');
+=======
+
+>>>>>>> ed727cd360712003677bbdd3676cabd5eaa65583
     }
 
     this.game.load.image('cool-down-empty', 'assets/images/cool-down-empty.png');
