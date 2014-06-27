@@ -38,11 +38,22 @@ var GameState = (function () {
 
 	GameState.prototype.createPlayingField = function () {
 		this.lake = this.game.add.tileSprite(25, 25, this.game.world.width-50, this.game.world.height-50, 'lake');
+
 		this.bottom_left_land = this.game.add.sprite(0, this.game.world.height-200, 'land-bottom-left');
+		this.bottom_left_land.body.clearShapes();
+		this.bottom_left_land.body.loadPoly('physicsData', 'land-bottom-left');
+
 		this.bottom_right_land = this.game.add.sprite(this.game.world.width-200, this.game.world.height-200, 'land-bottom-right');
+		this.bottom_right_land.body.clearShapes();
+		this.bottom_left_land.body.loadPoly('physicsData', 'land-bottom-right');
+
 		this.top_left_land = this.game.add.sprite(0, 0, 'land-top-left');
+		this.top_left_land.body.clearShapes();
+		this.bottom_left_land.body.loadPoly('physicsData', 'land-top-left');
+
 		this.top_right_land = this.game.add.sprite(this.game.world.width-200, 0, 'land-top-right');
-		
+		this.top_right_land.body.clearShapes();
+		this.bottom_left_land.body.loadPoly('physicsData', 'land-top-right');
 	};
 
 	GameState.prototype.update = function () {
