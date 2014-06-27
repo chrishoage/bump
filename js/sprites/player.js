@@ -13,6 +13,8 @@ var Player = (function () {
 		this.movementSpeed = 10;
 		this.rotationRate = 15;
 
+		this.lives = 3;
+
 		this.playerPowerUpActive = false;
 		this.playerPowerUpCooldown = false;
 	}
@@ -89,6 +91,19 @@ var Player = (function () {
 			}, this);
 		}, this);
 
+	};
+
+	Player.prototype.loseLife = function () {
+		this.lives--;
+
+		if(this.lives <= 0) {
+			this.kill();
+		} else {
+			var scaleDown = this.game.add.tween(this.scale).to({ x: 0, y: 0}, 500, Phaser.Easing.Back.Out, true, 0, false, false)
+			scaleDown.onComplete.add(function () {
+				console.log('respawn');
+			}, this);
+		}
 	};
 
 	return Player;

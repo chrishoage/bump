@@ -1,11 +1,15 @@
 var GameState = (function () {
 
 	var GameState = function(game) {
+		// describes the safe zone for teleportion and respawning
+		this.safeRectangle = new Rectangle(160, 160, 960, 390);
+
 		this.lake = null;
 		this.bottom_left_land = null;
 		this.bottom_right_land = null;
 		this.top_left_land = null;
 		this.top_right_land = null;
+		this.landElements = [];
 
 	  Phaser.State.call(this, game);
 
@@ -25,6 +29,7 @@ var GameState = (function () {
 	  this.players = this.game.state.states['setupState'].players;
 		this.createPlayingField();
 		this.createPlayers();
+		this.establishCollisionGroup();
 	};
 
 	GameState.prototype.createPlayers = function () {
@@ -43,11 +48,16 @@ var GameState = (function () {
 
 	GameState.prototype.createPlayingField = function () {
 		this.lake = this.game.add.tileSprite(0, 0, this.game.world.width, this.game.world.height, 'lake');
+		
 
 		this.bottom_left_land = this.game.add.sprite(100, this.game.world.height-100, 'land-bottom-left');
+		this.landElements.push(this.bottom_left_land);
 		this.bottom_right_land = this.game.add.sprite(this.game.world.width-100, this.game.world.height-100, 'land-bottom-right');
+		this.landElements.push(this.bottom_right_land);
 		this.top_left_land = this.game.add.sprite(100, 100, 'land-top-left');
+		this.landElements.push(this.top_left_land);
 		this.top_right_land = this.game.add.sprite(this.game.world.width-100, 100, 'land-top-right');
+		this.landElements.push(this.top_right_land);
 
 		this.game.physics.p2.enable([this.bottom_left_land, this.bottom_right_land, this.top_left_land, this.top_right_land], false);
 
@@ -79,6 +89,7 @@ var GameState = (function () {
 			newSprite.body.loadPolygon('physicsDataSides', 'land-side-' + randomSide);
 			newSprite.body.motionState = Phaser.Physics.P2.Body.STATIC;
 			newSprite.body.angle = 90;
+			this.landElements.push(newSprite);
 
 			// scoot
 			starting_x += 200;
@@ -90,6 +101,7 @@ var GameState = (function () {
 		newSprite.body.loadPolygon('physicsDataSides', 'land-filler-side-v');
 		newSprite.body.motionState = Phaser.Physics.P2.Body.STATIC;
 		newSprite.body.angle = 90;
+		this.landElements.push(newSprite);
 
 		starting_x = 300;
 		starting_y = 620;
@@ -104,6 +116,7 @@ var GameState = (function () {
 			newSprite.body.loadPolygon('physicsDataSides', 'land-side-' + randomSide);
 			newSprite.body.motionState = Phaser.Physics.P2.Body.STATIC;
 			newSprite.body.angle = 270;
+			this.landElements.push(newSprite);
 
 			// scoot
 			starting_x += 200;
@@ -115,6 +128,7 @@ var GameState = (function () {
 		newSprite.body.loadPolygon('physicsDataSides', 'land-filler-side-v');
 		newSprite.body.motionState = Phaser.Physics.P2.Body.STATIC;
 		newSprite.body.angle = 270;
+		this.landElements.push(newSprite);
 
 		starting_x = 100;
 		starting_y = 300;
@@ -128,6 +142,7 @@ var GameState = (function () {
 			newSprite.body.clearShapes();
 			newSprite.body.loadPolygon('physicsDataSides', 'land-side-' + randomSide);
 			newSprite.body.motionState = Phaser.Physics.P2.Body.STATIC;
+			this.landElements.push(newSprite);
 
 			// scoot
 			starting_y += 200;
@@ -138,6 +153,7 @@ var GameState = (function () {
 		newSprite.body.clearShapes();
 		newSprite.body.loadPolygon('physicsDataSides', 'land-filler-side-h');
 		newSprite.body.motionState = Phaser.Physics.P2.Body.STATIC;
+		this.landElements.push(newSprite);
 
 		starting_x = 1180;
 		starting_y = 300;
@@ -152,6 +168,7 @@ var GameState = (function () {
 			newSprite.body.loadPolygon('physicsDataSides', 'land-side-' + randomSide);
 			newSprite.body.motionState = Phaser.Physics.P2.Body.STATIC;
 			newSprite.body.angle = 180;
+			this.landElements.push(newSprite);
 
 			// scoot
 			starting_y += 200;
@@ -163,6 +180,36 @@ var GameState = (function () {
 		newSprite.body.loadPolygon('physicsDataSides', 'land-filler-side-h');
 		newSprite.body.motionState = Phaser.Physics.P2.Body.STATIC;
 		newSprite.body.angle = 180;
+		this.landElements.push(newSprite);
+	};
+
+	GameState.prototype.establishCollisionGroup = function () {
+		_this = this;
+
+		_(this.landElements).forEach(function(landElement) {
+			_(_this.players).forEach(function(player) {
+				player.body.createBodyCallback(landElement, _this.playerHitsLand);
+			});
+		});
+
+		this.game.physics.p2.setImpactEvents(true);
+	};
+
+	GameState.prototype.playerHitsLand = function (player, land) {
+		console.log("player hit land", player);
+		player.sprite.loseLife();
+
+		// determine if game over
+		var anyAlive = false;
+		_(this.players).forEach(function (player) {
+			if (player.alive) {
+				anyAlive = true;
+			}
+		});
+
+		if (anyAlive === false) {
+			console.log('gameover');
+		}
 	};
 
 	GameState.prototype.update = function () {
