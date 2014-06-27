@@ -13,7 +13,11 @@ var Player = (function () {
 		this.movementSpeed = 10;
 		this.rotationRate = 15;
 
+<<<<<<< HEAD
 		this.cooldownTimeLeft = 15;
+=======
+		this.lives = 3;
+>>>>>>> d48534a3fbc2e3b24b8942cb424fc3cd72c9a980
 
 		this.playerPowerUpActive = false;
 		this.playerPowerUpCooldown = false;
@@ -113,6 +117,18 @@ var Player = (function () {
 		this.createCooldownBar(posX, size, this.barColor);
 	}
 
+	Player.prototype.loseLife = function () {
+		this.lives--;
+
+		if(this.lives <= 0) {
+			this.kill();
+		} else {
+			var scaleDown = this.game.add.tween(this.scale).to({ x: 0, y: 0}, 500, Phaser.Easing.Back.Out, true, 0, false, false)
+			scaleDown.onComplete.add(function () {
+				console.log('respawn');
+			}, this);
+		}
+	};
 
 	return Player;
 
