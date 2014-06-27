@@ -18,13 +18,13 @@ var GameState = (function () {
 	};
 
 	GameState.prototype.create = function () {
-    this.game.physics.p2.defaultRestitution = 0.8;
-		this.game.physics.p2.checkWorldBounds = true
+    this.game.physics.startSystem(Phaser.Physics.P2JS);
+    this.game.physics.p2.defaultRestitution = 5;
+    this.game.physics.p2.applyGravity = false;
 
 	  this.players = this.game.state.states['setupState'].players;
-
-		this.createPlayers();
 		this.createPlayingField();
+		this.createPlayers();
 	};
 
 	GameState.prototype.createPlayers = function () {
@@ -32,8 +32,13 @@ var GameState = (function () {
 		console.log('existing players', this.game.state.states['setupState'].players);
 		_.each(this.players, function (player) {
 			console.log(player);
-			_this.game.add.existing(player);
-		});
+			this.game.physics.p2.enable(player, true);
+			player.body.collideWorldBounds = true;
+			player.body.setCircle(28);
+
+			player.smoothed = false;
+			this.game.add.existing(player);
+		}, this);
 	};
 
 	GameState.prototype.createPlayingField = function () {
@@ -57,10 +62,15 @@ var GameState = (function () {
 	};
 
 	GameState.prototype.update = function () {
-		//_.each(this.players, function (player) {
-		//	this.game.physics.arcade.collide(player, this.players);
-		//}, this);
+		_.each(this.players, function (player) {
+			player.body.thrust(100);
+			//this.game.physics.arcade.collide(player, this.players);
+		}, this);
 
+	};
+
+	GameState.prototype.render = function () {
+	  this.game.debug.spriteInfo(this.players[0], 32, 32);
 	};
 
 	return GameState;
