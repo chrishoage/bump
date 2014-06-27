@@ -133,7 +133,9 @@
 					var conn = peer.connect(connectTo);
 					if (!conn) return alert('Error: There was an error connecting to the game');
 					conn.on('open', function () {
-						$controller.addEventListener('click', function (event) {
+						var setupController = function (event) {
+
+							$controller.removeEventListener('click', setupController, false);
 							var el = document.documentElement,
 									rfs = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen;
 							rfs.call(el);
@@ -141,7 +143,13 @@
 							conn.send({
 								type: 'click',
 								timeStamp: event.timeStamp
-							})
+							});
+							window.addEventListener('click', function (event) {
+									conn.send({
+										type: 'click',
+										timeStamp: event.timeStamp
+									});
+							}, false);
 							window.addEventListener('devicemotion', function(event) {
 								event.preventDefault();
 								var xyz = function (o) {
@@ -157,8 +165,9 @@
 									orientation: orientation(),
 									timeStamp: event.timeStamp
 								});
-						}, true);
-						}, true);
+							}, true);
+						}
+						$controller.addEventListener('click', setupController, false);
 					});
 				});
 			}, true);
