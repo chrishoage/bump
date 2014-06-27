@@ -28,8 +28,8 @@ var PreloadState = (function () {
     this.game.load.image('land-top-left', 'assets/images/land/top-left.png');
     this.game.load.image('land-top-right', 'assets/images/land/top-right.png');
 
-    for (var i = 1; i <= numberLandSides; i++) {
-      
+    for (var i = 1; i <= this.numberLandSides; i++) {
+
     }
 
     this.game.load.image('land-side', 'assets/images/land/side.png');

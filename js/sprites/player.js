@@ -67,7 +67,7 @@ var Player = (function () {
 	Player.prototype.triggerPowerUp = function () {
 		// sub for Players
 		this.playerPowerUp = true;
-		game.time.events.add(Phaser.Timer.SECOND * 4, function() {
+		this.game.time.events.add(Phaser.Timer.SECOND * 4, function() {
 
 		}, this);
 	};

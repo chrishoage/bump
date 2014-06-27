@@ -34,7 +34,7 @@ var GameState = (function () {
 			console.log(player);
 			this.game.physics.p2.enable(player, true);
 			player.body.collideWorldBounds = true;
-			player.body.setCircle(28);
+			player.body.setCircle(32);
 
 			player.smoothed = false;
 			this.game.add.existing(player);
@@ -50,7 +50,7 @@ var GameState = (function () {
 		this.top_right_land = this.game.add.sprite(this.game.world.width-100, 100, 'land-top-right');
 
 		this.game.physics.p2.enable([this.bottom_left_land, this.bottom_right_land, this.top_left_land, this.top_right_land], false);
-		
+
 		this.bottom_left_land.body.clearShapes();
 		this.bottom_left_land.body.loadPolygon('physicsData', 'land-bottom-left');
 		this.bottom_right_land.body.clearShapes();
@@ -60,10 +60,10 @@ var GameState = (function () {
 		this.top_right_land.body.clearShapes();
 		this.top_right_land.body.loadPolygon('physicsData', 'land-top-right');
 
-		this.top_right_land.body.motionState = 
-		this.top_left_land.body.motionState = 
-		this.bottom_right_land.body.motionState = 
-		this.bottom_left_land.body.motionState = 
+		this.top_right_land.body.motionState =
+		this.top_left_land.body.motionState =
+		this.bottom_right_land.body.motionState =
+		this.bottom_left_land.body.motionState =
 			Phaser.Physics.P2.Body.STATIC;
 	};
 
