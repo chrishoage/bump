@@ -8,9 +8,8 @@ var Player = (function () {
 
 	  this.playerReady = false;
 
-		this.movementSpeed = 25;
+		this.movementSpeed = 250;
 
-		this.game.physics.p2.enable(this);
 
 	}
 
