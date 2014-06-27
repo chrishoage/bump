@@ -22,6 +22,10 @@ var PreloadState = (function () {
 		this.game.load.image('player2', 'assets/images/player2.png');
 		this.game.load.image('player3', 'assets/images/player3.png');
 		this.game.load.image('player4', 'assets/images/player4.png');
+		this.game.load.spritesheet('player1-sprite', 'assets/images/sprite-player1.png', 80, 65, 3);
+		this.game.load.spritesheet('player2-sprite', 'assets/images/sprite-player2.png', 80, 65, 3);
+		this.game.load.spritesheet('player3-sprite', 'assets/images/sprite-player3.png', 80, 65, 3);
+		this.game.load.spritesheet('player4-sprite', 'assets/images/sprite-player4.png', 80, 65, 3);
     this.game.load.image('lake', 'assets/images/water.gif');
     this.game.load.image('land-bottom-left', 'assets/images/land/bottom-left.png');
     this.game.load.image('land-bottom-right', 'assets/images/land/bottom-right.png');

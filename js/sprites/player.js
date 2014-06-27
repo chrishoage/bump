@@ -4,8 +4,10 @@ var Player = (function () {
 		x = x || game.world.centerX;
 		y = y || game.world.centerY;
 
-	  Phaser.Sprite.call(this, game, x, y, asset, frame);
+	  Phaser.Sprite.call(this, game, x, y, asset+'-sprite', frame);
 
+	  this.animations.add('kick',[0,1,2],6,true);
+	  this.play('kick')
 	  this.playerReady = false;
 
 		this.movementSpeed = 10;

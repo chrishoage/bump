@@ -22,8 +22,8 @@ var SetupState = (function () {
 
 	SetupState.prototype.create = function () {
 
-		var playerImages = [ 'player4', 'player1', 'player2', 'player3'];
-		var playerObjects = [PlayerFour, PlayerOne, PlayerTwo, PlayerThree];
+		var playerImages = ['player1', 'player2', 'player3', 'player4'];
+		var playerObjects = [PlayerOne, PlayerTwo, PlayerThree, PlayerFour];
 
     var style = { font: "65px Arial", fill: "#cf2127", align: "center" };
     var smallStyle = { font: "20px Arial", fill: "#fff", align: "center" };

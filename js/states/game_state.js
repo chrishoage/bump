@@ -32,7 +32,7 @@ var GameState = (function () {
 		console.log('existing players', this.game.state.states['setupState'].players);
 		_.each(this.players, function (player) {
 			console.log(player);
-			this.game.physics.p2.enable(player, true);
+			this.game.physics.p2.enable(player);
 			player.body.collideWorldBounds = true;
 			player.body.setCircle(32);
 
