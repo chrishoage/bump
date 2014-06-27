@@ -197,19 +197,21 @@ var GameState = (function () {
 	};
 
 	GameState.prototype.playerHitsLand = function (player, land) {
+		var _this = player.game.state.states['gameState'];
 		if (player.sprite.isDead) return;
 		console.log("player hit land", player);
 		player.sprite.loseLife(function () {
 			// determine if game over
-			var winner = _.where(player.game.state.states['gameState'].players, {'isDead': true});
+			var winner = _.where(_this.players, {'isDead': false});
 			if (winner.length <= 1) {
 				console.log('gameover');
 				var gameover = player.game.add.sprite(player.game.world.centerX-10,  player.game.world.centerY-10, 'game-over');
 	  	  gameover.anchor.set(0.5);
 	  	  if(winner.length == 1) {
-	  	  	player.game.add.sprite(player.game.world.centerX, player.game.world.centerY, winner[0].name);
+	  	  	_this.game.add.tween(winner[0].scale).to({ x: 2, y: 2}, 500, Phaser.Easing.Back.Out, true, 0, false, false)
+	  	  	_this.game.world.bringToTop(winner[0]);
 	  	  }
-	  	  
+
 	  	  player.game.add.tween(gameover).from({y:-600},1000,Phaser.Easing.Bounce.Out,true, 100, false, false);
 			}
 		});
