@@ -17,6 +17,7 @@ var BootState = (function () {
 
 		// setup random game options
 		this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+		this.game.scale.startFullScreen();
 		this.game.stage.disableVisibilityChange = true;
 	};
 

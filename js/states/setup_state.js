@@ -67,6 +67,7 @@ var SetupState = (function () {
     	_this.game.add.sprite(50, 120+120*_this.players.length, playerImages.shift());
     	conn.on('open', function () {
     		conn.send({
+          playerName: player.name,
     			color: '#'+player.barColor.toString(16)
     		})
     	})
