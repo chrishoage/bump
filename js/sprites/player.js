@@ -149,6 +149,7 @@ var Player = (function () {
 	Player.prototype.respawn = function () {
 		this.isDead = false;
 		this.body.setZeroRotation();
+		this.body.setZeroVelocity();
 		var saferect = this.game.state.states["gameState"].safeRectangle;
 		this.body.x = this.game.rnd.integerInRange(saferect.left, saferect.right);
 		this.body.y = this.game.rnd.integerInRange(saferect.top, saferect.bottom);
