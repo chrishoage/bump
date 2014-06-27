@@ -6,7 +6,7 @@ var PlayerTwo = (function () {
 		asset = asset || 'player2';
 	  Player.call(this, game, x, y, asset, frame);
 	  this.thrusted = false
-	  this.barColor = 0x65BF85;
+	  this.barColor = 0xFBB03B;
 	}
 
 	PlayerTwo.prototype = Object.create(Player.prototype);
