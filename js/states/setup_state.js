@@ -29,11 +29,13 @@ var SetupState = (function () {
     var smallStyle = { font: "20px Arial", fill: "#fff", align: "center" };
 
     var t = this.game.add.text(180, this.game.world.height-50, 'Use the QR Code to connect your phone to use as a controller, remember to lock your device orientation!', smallStyle);
+        t.alpha = 0;
+        this.game.add.tween(t).to({alpha:1},1500, Phaser.Easing.Linear.None, true, 0, Number.MAX_VALUE, true);
 
 		var qrHost = this.game.add.sprite(this.game.world.centerX-10,  this.game.world.centerY-50, 'bump-title');
     qrHost.anchor.set(0.5);
 
-    this.game.add.tween(qrHost).from({y:-600},1500,Phaser.Easing.Bounce.Out,true, 100, false, false);
+    this.game.add.tween(qrHost).from({y:-600},1000,Phaser.Easing.Bounce.Out,true, 100, false, false);
     var qrSpritePosX, qrSpritePosY, qrSpriteWidth, qrSpriteHeight;
     if (this.game.device.windows) {
     	qrSpritePosX = this.game.world.centerX - 43;
