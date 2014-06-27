@@ -5,7 +5,7 @@ var PlayerOne = (function () {
 		y = y || game.world.centerY;
 		asset = asset || 'player1';
 	  Player.call(this, game, x, y, asset, frame);
-	  this.barColor = 0x65BF85;
+	  this.barColor = 0xFBB03B;
 	}
 
 	PlayerOne.prototype = Object.create(Player.prototype);

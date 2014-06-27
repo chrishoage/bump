@@ -11,9 +11,8 @@
     		<style>
     			.player1 {
     				background-image: url('/assets/images/ready-player1.png');
-    				border: solid 10px black;
     			}
-					
+
 					.player2 {
     				background-image: url('/assets/images/ready-player2.png');
     			}
@@ -27,7 +26,8 @@
     			}
 
 					#controller {
-						background: red;
+						position: relative;
+						background-color: red;
 						display:-ms-flexbox;
 						-ms-flex-pack:center;
 						-ms-flex-align:center;
@@ -44,6 +44,11 @@
 
 					}
 					#setup {
+						background-position: 24px 249px;
+						background-size: 90%;
+						background-repeat: no-repeat;
+						width: 567px;
+						height: 565px;
 						font-family: Arial;
 						color: #FFF;
 						/* Internet Explorer 10 */
@@ -92,10 +97,13 @@
 		<script>
 			// I want this to fire before everything else loads
 			var $controller = document.getElementById('controller');
+			var $setup = document.getElementById('setup');
 
 			var setSize = function () {
 				$controller.style.width = window.innerWidth+'px';
 				$controller.style.height = window.innerHeight+'px';
+				//$setup.style.width = window.innerHeight+'px';
+				//$setup.style.height = window.innerWidth+'px';
 			}
 
 			setSize();
@@ -152,7 +160,7 @@
 					conn.on('open', function () {
 						conn.on('data', function (data) {
 							$controller.style.backgroundColor = data.color,
-							$controller.className = data.playerName
+							$setup.className = data.playerName
 						});
 						var setupController = function (event) {
 
