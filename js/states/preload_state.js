@@ -18,6 +18,8 @@ var PreloadState = (function () {
     this.game.load.setPreloadSprite(this.preloadBar);
 
     // load assets
+    this.game.load.image('bump-title', 'assets/images/qr_image_host.png');
+    this.game.load.image('game-over', 'assets/images/game-over.png');
 		this.game.load.image('player1', 'assets/images/player1.png');
 		this.game.load.image('player2', 'assets/images/player2.png');
 		this.game.load.image('player3', 'assets/images/player3.png');

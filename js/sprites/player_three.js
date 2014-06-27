@@ -17,6 +17,9 @@ var PlayerThree = (function () {
 			this.body.setZeroVelocity();
 			if (!this.teleported) {
 				this.teleported = true;
+				
+				this.game.state.states["gameState"].safeRectangle
+
 				this.body.x = this.game.world.randomX;
 				this.body.y = this.game.world.randomY;
 			}

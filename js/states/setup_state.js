@@ -1,6 +1,7 @@
 var SetupState = (function () {
 
 	var SetupState = function(game, x, y, asset, frame) {
+    this.lake = null;
     this.players = [];
 
 	  Phaser.State.call(this, game);
@@ -17,10 +18,10 @@ var SetupState = (function () {
 			var data = new Image();
 			data.src = dataURI;
 			this.game.cache.addImage('qr-code', dataURI, data);
-			this.game.load.image('bump-title', 'assets/images/qr_image_host.png');
 	};
 
 	SetupState.prototype.create = function () {
+    this.game.add.existing(new Lake(this.game));
 
 		var playerImages = ['player1', 'player2', 'player3', 'player4'];
 		var playerObjects = [PlayerOne, PlayerTwo, PlayerThree, PlayerFour];
@@ -62,10 +63,9 @@ var SetupState = (function () {
     	player.setupConnection(conn);
     	_this.players.push(player);
     	_this.game.add.sprite(50, 120+120*_this.players.length, playerImages.shift());
-
-
-
     });
+
+
 
 
     // TODO remove only for debugging
@@ -78,6 +78,7 @@ var SetupState = (function () {
 		if (this.players.length && _.every(this.players, 'playerReady')) {
 			this.game.state.start("gameState");
 		}
+    
 	};
 
 	return SetupState;

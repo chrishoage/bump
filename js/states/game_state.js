@@ -2,9 +2,8 @@ var GameState = (function () {
 
 	var GameState = function(game) {
 		// describes the safe zone for teleportion and respawning
-		this.safeRectangle = new Rectangle(160, 160, 960, 390);
+		this.safeRectangle = new Phaser.Rectangle(160, 160, 960, 390);
 
-		this.lake = null;
 		this.bottom_left_land = null;
 		this.bottom_right_land = null;
 		this.top_left_land = null;
@@ -47,8 +46,7 @@ var GameState = (function () {
 	};
 
 	GameState.prototype.createPlayingField = function () {
-		this.lake = this.game.add.tileSprite(0, 0, this.game.world.width, this.game.world.height, 'lake');
-		
+		this.game.add.existing(new Lake(this.game));
 
 		this.bottom_left_land = this.game.add.sprite(100, this.game.world.height-100, 'land-bottom-left');
 		this.landElements.push(this.bottom_left_land);
@@ -210,11 +208,6 @@ var GameState = (function () {
 		if (anyAlive === false) {
 			console.log('gameover');
 		}
-	};
-
-	GameState.prototype.update = function () {
-		this.lake.tilePosition.x += 0.25;
-  	this.lake.tilePosition.y += 0.25;
 	};
 
 	return GameState;
