@@ -7,12 +7,15 @@ var PlayerFour = (function () {
 	  Player.call(this, game, x, y, asset, frame);
 
 	  this.mushroomed = false;
+	  this.barColor = 0xD91919;
+
 	}
 
 	PlayerFour.prototype = Object.create(Player.prototype);
 	PlayerFour.prototype.constructor = PlayerFour;
 
 	PlayerFour.prototype.update = function () {
+		Player.prototype.update.call(this);
 		if (this.playerPowerUpActive && !this.playerPowerUpCooldown) {
 			console.log('power up active')
 			if (!this.mushroomed) {

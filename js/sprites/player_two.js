@@ -6,12 +6,14 @@ var PlayerTwo = (function () {
 		asset = asset || 'player2';
 	  Player.call(this, game, x, y, asset, frame);
 	  this.thrusted = false
+	  this.barColor = 0x65BF85;
 	}
 
 	PlayerTwo.prototype = Object.create(Player.prototype);
 	PlayerTwo.prototype.constructor = PlayerTwo;
 
 	PlayerTwo.prototype.update = function () {
+		Player.prototype.update.call(this);
 		if (this.playerPowerUpActive && !this.playerPowerUpCooldown) {
 			if (!this.thrusted) {
 				console.log('power up active')
