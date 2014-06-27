@@ -8,7 +8,7 @@ var Player = (function () {
 
 	  this.playerReady = false;
 
-		this.movementSpeed = 250;
+		this.movementSpeed = 50;
 
 
 	}
@@ -50,37 +50,33 @@ var Player = (function () {
 
 		//logic to calculate the tilt value of the accelerometer (0-10)
 		distance = Math.sqrt(accel.x*accel.x + accel.y*accel.y);
+		distance = distance * 10;
+		var vel = this.body.velocity;
+		var speed = Math.sqrt(vel.x*vel.x + vel.y*vel.y);
 
+		var rotationRate = 15;
 		//logic to calculate the angle from accelerometer data
+		var rotating = (Math.abs(accel.x) > 5);
 		if(accel.x>0 && accel.y>0) {
-            theta = Math.atan(accel.y/accel.x);
-        }else if(accel.x<0 && accel.y>0) {
-            theta = 1.57079633 - Math.atan(accel.x/accel.y);
-        }else if(accel.x<0 && accel.y<0) {
-            theta = 3.14159266 + Math.atan(accel.y/accel.x);
-        }else if(accel.x>0 && accel.y<0) {
-            theta = 4.71238899 - Math.atan(accel.x/accel.y);
-        }
-        
-		console.log(theta);
-		this.body.rotation = theta;
-		this.body.thrust(distance*10);
-		
-		if (this.x < -this.width/2) {
-		  this.x = -this.width/2;
+		  this.body.reverse(distance);
+		  if(rotating) this.body.rotateRight(rotationRate)
+		}else if(accel.x<0 && accel.y>0) {
+		  if(rotating) this.body.rotateLeft(rotationRate)
+		  this.body.reverse(distance);
+		}else if(accel.x<0 && accel.y<0) {
+		  if(rotating) this.body.rotateLeft(rotationRate)
+		  this.body.thrust(distance)
+		}else if(accel.x>0 && accel.y<0) {
+		   if(rotating) this.body.rotateRight(rotationRate)
+		   this.body.thrust(distance)
 		}
-
-		if (this.x > this.game.width - this.width/2) {
-		  this.x = this.game.width - this.width/2;
-		}
-
-		if (this.y < -this.height/2) {
-		  this.y = -this.height/2;
-		}
-
-		if (this.y > this.game.height - this.height/2) {
-		  this.y = this.game.height - this.height/2;
-		}
+		// if ((this.body.rotation - theta) > 0) {
+		// 	this.body.rotateLeft(100)
+		// } else {
+		// 	this.body.rotateRight(100)
+		// }
+		//this.body.rotation = theta;
+		//this.body.thrust(distance*10);
 
 	};
 
