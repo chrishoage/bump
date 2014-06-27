@@ -27,19 +27,21 @@ var PreloadState = (function () {
     this.game.load.image('land-bottom-right', 'assets/images/land/bottom-right.png');
     this.game.load.image('land-top-left', 'assets/images/land/top-left.png');
     this.game.load.image('land-top-right', 'assets/images/land/top-right.png');
+    this.game.load.image('land-filler-side-v', 'assets/images/land/filler-side-v.png');
+    this.game.load.image('land-filler-side-h', 'assets/images/land/filler-side-h.png');
 
-    for (var i = 1; i <= numberLandSides; i++) {
-      
+    for (var i = 1; i <= this.numberLandSides; i++) {
+      this.game.load.image('land-side-'+ i, 'assets/images/land/side-' + i + '.png');
     }
-
-    this.game.load.image('land-side', 'assets/images/land/side.png');
 
     this.game.load.image('cool-down-empty', 'assets/images/cool-down-empty.png');
     this.game.load.image('cool-down-green', 'assets/images/cool-down-green.png');
     this.game.load.image('cool-down-red', 'assets/images/cool-down-red.png');
     this.game.load.image('cool-down-yellow', 'assets/images/cool-down-yellow.png');
 
-    this.game.load.physics('physicsData', 'assets/json/sprites.json');
+    this.game.load.physics('physicsDataSides', 'assets/json/sides.json');
+    this.game.load.physics('physicsDataCorners', 'assets/json/corners.json');
+
 
 		this.game.stage.setBackgroundColor("#1192bd");
 	};

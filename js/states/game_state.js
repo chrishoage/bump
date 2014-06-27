@@ -50,35 +50,124 @@ var GameState = (function () {
 		this.top_right_land = this.game.add.sprite(this.game.world.width-100, 100, 'land-top-right');
 
 		this.game.physics.p2.enable([this.bottom_left_land, this.bottom_right_land, this.top_left_land, this.top_right_land], false);
-		
+
 		this.bottom_left_land.body.clearShapes();
-		this.bottom_left_land.body.loadPolygon('physicsData', 'land-bottom-left');
+		this.bottom_left_land.body.loadPolygon('physicsDataCorners', 'land-bottom-left');
 		this.bottom_right_land.body.clearShapes();
-		this.bottom_right_land.body.loadPolygon('physicsData', 'land-bottom-right');
+		this.bottom_right_land.body.loadPolygon('physicsDataCorners', 'land-bottom-right');
 		this.top_left_land.body.clearShapes();
-		this.top_left_land.body.loadPolygon('physicsData', 'land-top-left');
+		this.top_left_land.body.loadPolygon('physicsDataCorners', 'land-top-left');
 		this.top_right_land.body.clearShapes();
-		this.top_right_land.body.loadPolygon('physicsData', 'land-top-right');
+		this.top_right_land.body.loadPolygon('physicsDataCorners', 'land-top-right');
 
 		this.top_right_land.body.motionState = 
 		this.top_left_land.body.motionState = 
 		this.bottom_right_land.body.motionState = 
-		this.bottom_left_land.body.motionState = 
-			Phaser.Physics.P2.Body.STATIC;
+		this.bottom_left_land.body.motionState = Phaser.Physics.P2.Body.STATIC;
+
+		var starting_x = 300;
+		var starting_y = 100;
+
+		// fill in top side
+		var newSprite = null;
+		for(var i=0; i < 4; i++) {
+			var randomSide = this.game.rnd.integerInRange(1, this.game.state.states['preloadState'].numberLandSides);
+
+			newSprite = this.game.add.sprite(starting_x, starting_y, 'land-side-' + randomSide);
+			this.game.physics.p2.enable([newSprite]);
+			newSprite.body.clearShapes();
+			newSprite.body.loadPolygon('physicsDataSides', 'land-side-' + randomSide);
+			newSprite.body.motionState = Phaser.Physics.P2.Body.STATIC;
+			newSprite.body.angle = 90;
+
+			// scoot
+			starting_x += 200;
+		}
+
+		newSprite = this.game.add.sprite(starting_x-60, starting_y, 'land-filler-side-v');
+		this.game.physics.p2.enable([newSprite]);
+		newSprite.body.clearShapes();
+		newSprite.body.loadPolygon('physicsDataSides', 'land-filler-side-v');
+		newSprite.body.motionState = Phaser.Physics.P2.Body.STATIC;
+		newSprite.body.angle = 90;
+
+		starting_x = 300;
+		starting_y = 620;
+
+		// fill in bottom side
+		for(var i=0; i < 4; i++) {
+			var randomSide = this.game.rnd.integerInRange(1, this.game.state.states['preloadState'].numberLandSides);
+
+			newSprite = this.game.add.sprite(starting_x, starting_y, 'land-side-' + randomSide);
+			this.game.physics.p2.enable([newSprite]);
+			newSprite.body.clearShapes();
+			newSprite.body.loadPolygon('physicsDataSides', 'land-side-' + randomSide);
+			newSprite.body.motionState = Phaser.Physics.P2.Body.STATIC;
+			newSprite.body.angle = 270;
+
+			// scoot
+			starting_x += 200;
+		}
+
+		newSprite = this.game.add.sprite(starting_x-60, starting_y, 'land-filler-side-v');
+		this.game.physics.p2.enable([newSprite]);
+		newSprite.body.clearShapes();
+		newSprite.body.loadPolygon('physicsDataSides', 'land-filler-side-v');
+		newSprite.body.motionState = Phaser.Physics.P2.Body.STATIC;
+		newSprite.body.angle = 270;
+
+		starting_x = 100;
+		starting_y = 300;
+
+		// fill in left side
+		for(var i=0; i < 1; i++) {
+			var randomSide = this.game.rnd.integerInRange(1, this.game.state.states['preloadState'].numberLandSides);
+
+			newSprite = this.game.add.sprite(starting_x, starting_y, 'land-side-' + randomSide);
+			this.game.physics.p2.enable([newSprite]);
+			newSprite.body.clearShapes();
+			newSprite.body.loadPolygon('physicsDataSides', 'land-side-' + randomSide);
+			newSprite.body.motionState = Phaser.Physics.P2.Body.STATIC;
+
+			// scoot
+			starting_y += 200;
+		}
+
+		newSprite = this.game.add.sprite(starting_x, starting_y-40, 'land-filler-side-h');
+		this.game.physics.p2.enable([newSprite]);
+		newSprite.body.clearShapes();
+		newSprite.body.loadPolygon('physicsDataSides', 'land-filler-side-h');
+		newSprite.body.motionState = Phaser.Physics.P2.Body.STATIC;
+
+		starting_x = 1180;
+		starting_y = 300;
+
+		// fill in right side
+		for(var i=0; i < 1; i++) {
+			var randomSide = this.game.rnd.integerInRange(1, this.game.state.states['preloadState'].numberLandSides);
+
+			newSprite = this.game.add.sprite(starting_x, starting_y, 'land-side-' + randomSide);
+			this.game.physics.p2.enable([newSprite]);
+			newSprite.body.clearShapes();
+			newSprite.body.loadPolygon('physicsDataSides', 'land-side-' + randomSide);
+			newSprite.body.motionState = Phaser.Physics.P2.Body.STATIC;
+			newSprite.body.angle = 180;
+
+			// scoot
+			starting_y += 200;
+		}
+
+		newSprite = this.game.add.sprite(starting_x, starting_y-40, 'land-filler-side-h');
+		this.game.physics.p2.enable([newSprite]);
+		newSprite.body.clearShapes();
+		newSprite.body.loadPolygon('physicsDataSides', 'land-filler-side-h');
+		newSprite.body.motionState = Phaser.Physics.P2.Body.STATIC;
+		newSprite.body.angle = 180;
 	};
 
 	GameState.prototype.update = function () {
-		_.each(this.players, function (player) {
-			player.body.thrust(100);
-			//this.game.physics.arcade.collide(player, this.players);
-		}, this);
-
-	};
-
-	GameState.prototype.render = function () {
-		if(this.players.length > 0) {
-	  	this.game.debug.spriteInfo(this.players[0], 32, 32);
-		}
+		this.lake.tilePosition.x += 0.25;
+  	this.lake.tilePosition.y += 0.25;
 	};
 
 	return GameState;
