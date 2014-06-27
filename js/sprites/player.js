@@ -3,9 +3,9 @@ var Player = (function () {
 	var Player = function(game, x, y, asset, frame) {
 		x = x || game.world.centerX;
 		y = y || game.world.centerY;
-
 	  Phaser.Sprite.call(this, game, x, y, asset+'-sprite', frame);
-
+		this.name = asset;
+		console.log(this.name)
 	  this.animations.add('kick',[0,1,2],6,true);
 	  this.play('kick')
 	  this.playerReady = false;

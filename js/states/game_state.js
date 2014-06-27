@@ -25,6 +25,7 @@ var GameState = (function () {
 	  this.players = this.game.state.states['setupState'].players;
 		this.createPlayingField();
 		this.createPlayers();
+		this.createLives();
 	};
 
 	GameState.prototype.createPlayers = function () {
@@ -38,6 +39,16 @@ var GameState = (function () {
 
 			player.smoothed = false;
 			this.game.add.existing(player);
+		}, this);
+	};
+
+	GameState.prototype.createLives = function () {
+		this.lives = this.game.add.group();
+		_.each(this.players, function (player, p) {
+			for (var i = 0; i < 3; i++) {
+				var tube = this.lives.create(this.game.world.width - 100 + (30 * i) - (125 * p), 20, player.name+'-life');
+			};
+			console.log(player.name+'-life', tube);
 		}, this);
 	};
 
