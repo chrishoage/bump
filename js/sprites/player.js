@@ -3,9 +3,21 @@ var Player = (function () {
 	var Player = function(game, x, y, asset, frame) {
 		x = x || game.world.centerX;
 		y = y || game.world.centerY;
+
 	  Phaser.Sprite.call(this, game, x, y, asset, frame);
 
 	  this.playerReady = false;
+
+		this.movementSpeed = 25;
+
+
+
+		this.game.physics.enable(this, Phaser.Physics.ARCADE);
+		this.body.maxVelocity.setTo(100, 100); // x, y
+
+		this.gameWidth = this.game.width;
+		this.gameHeight = this.game.height;
+
 	}
 
 	Player.prototype = Object.create(Phaser.Sprite.prototype);
@@ -23,8 +35,38 @@ var Player = (function () {
 				}
 			} else if (data.type === 'devicemotion') {
 				// device motion stuff here
+				_this.movePlayer(data);
 			}
 		});
+	};
+
+	Player.prototype.movePlayer = function (data) {
+		var aig = data.accelerationIncludingGravity;
+		var delta = {
+			x: data.orientation ? aig.x : aig.y,
+			y: data.orientation ? aig.y : aig.x
+		}
+
+
+		this.body.velocity.x += (delta.x  / 10) * this.movementSpeed;
+		this.body.velocity.y += (delta.y  / 10) * this.movementSpeed;
+
+		if (this.x < -this.width/2) {
+		  this.x = -this.width/2;
+		}
+
+		if (this.x > this.gameWidth - this.width/2) {
+		  this.x = this.gameWidth - this.width/2;
+		}
+
+		if (this.y < -this.height/2) {
+		  this.y = -this.height/2;
+		}
+
+		if (this.y > this.gameHeight - this.height/2) {
+		  this.y = this.gameHeight - this.height/2;
+		}
+
 	};
 
 	return Player;
