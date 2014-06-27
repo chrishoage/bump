@@ -16,8 +16,7 @@ var BootState = (function () {
 		this.game.load.image('loaderFull', 'assets/images/loader_full.png');
 
 		// setup random game options
-		this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-		this.game.scale.startFullScreen();
+		this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
 		this.game.stage.disableVisibilityChange = true;
 	};
 

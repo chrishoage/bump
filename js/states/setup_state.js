@@ -73,9 +73,9 @@ var SetupState = (function () {
     	})
     });
 
-    // TODO remove only for debugging
+    // full screen on click
     this.game.input.onDown.add(function() {
-      this.game.state.start("gameState");
+      this.game.scale.startFullScreen();
     }, this);
 	}
 
