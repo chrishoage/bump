@@ -8,6 +8,7 @@ var GameState = (function () {
 		this.top_right_land = null;
 
 	  Phaser.State.call(this, game);
+
 	}
 
 	GameState.prototype = Object.create(Phaser.State.prototype);
@@ -17,6 +18,11 @@ var GameState = (function () {
 	};
 
 	GameState.prototype.create = function () {
+    this.game.physics.p2.defaultRestitution = 0.8;
+		this.game.physics.p2.checkWorldBounds = true
+
+	  this.players = this.game.state.states['setupState'].players;
+
 		this.createPlayers();
 		this.createPlayingField();
 	};
@@ -24,7 +30,7 @@ var GameState = (function () {
 	GameState.prototype.createPlayers = function () {
 		var _this = this;
 		console.log('existing players', this.game.state.states['setupState'].players);
-		_.each(this.game.state.states['setupState'].players, function (player) {
+		_.each(this.players, function (player) {
 			console.log(player);
 			_this.game.add.existing(player);
 		});
@@ -37,6 +43,13 @@ var GameState = (function () {
 		this.top_left_land = this.game.add.sprite(0, 0, 'land-top-left');
 		this.top_right_land = this.game.add.sprite(this.game.world.width-200, 0, 'land-top-right');
 		
+	};
+
+	GameState.prototype.update = function () {
+		//_.each(this.players, function (player) {
+		//	this.game.physics.arcade.collide(player, this.players);
+		//}, this);
+
 	};
 
 	return GameState;

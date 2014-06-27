@@ -11,7 +11,7 @@ var BootState = (function () {
 
 	BootState.prototype.preload = function () {
 		console.log("preloading loader assets");
-		
+
 		this.game.load.image('loaderEmpty', 'assets/images/loader_empty.png');
 		this.game.load.image('loaderFull', 'assets/images/loader_full.png');
 
@@ -21,6 +21,7 @@ var BootState = (function () {
 	};
 
 	BootState.prototype.create = function () {
+    this.game.physics.startSystem(Phaser.Physics.P2JS);
 		this.game.state.start("preloadState");
 	}
 

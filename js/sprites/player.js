@@ -10,13 +10,7 @@ var Player = (function () {
 
 		this.movementSpeed = 25;
 
-
-
-		this.game.physics.enable(this, Phaser.Physics.ARCADE);
-		this.body.maxVelocity.setTo(100, 100); // x, y
-
-		this.gameWidth = this.game.width;
-		this.gameHeight = this.game.height;
+		this.game.physics.p2.enable(this);
 
 	}
 
@@ -55,16 +49,16 @@ var Player = (function () {
 		  this.x = -this.width/2;
 		}
 
-		if (this.x > this.gameWidth - this.width/2) {
-		  this.x = this.gameWidth - this.width/2;
+		if (this.x > this.game.width - this.width/2) {
+		  this.x = this.game.width - this.width/2;
 		}
 
 		if (this.y < -this.height/2) {
 		  this.y = -this.height/2;
 		}
 
-		if (this.y > this.gameHeight - this.height/2) {
-		  this.y = this.gameHeight - this.height/2;
+		if (this.y > this.game.height - this.height/2) {
+		  this.y = this.game.height - this.height/2;
 		}
 
 	};

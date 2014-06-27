@@ -18,6 +18,10 @@ var PreloadState = (function () {
     this.game.load.setPreloadSprite(this.preloadBar);
 
     // load assets
+		this.game.load.image('player1', 'assets/images/player1.png');
+		this.game.load.image('player2', 'assets/images/player2.png');
+		this.game.load.image('player3', 'assets/images/player3.png');
+		this.game.load.image('player4', 'assets/images/player4.png');
 		this.game.load.image('player', 'assets/images/circle.png');
     this.game.load.image('lake', 'assets/images/water.gif');
     this.game.load.image('land-bottom-left', 'assets/images/land/bottom-left.png');
@@ -40,9 +44,8 @@ var PreloadState = (function () {
 		this.createTopLogo();
 
 		// move to next state
-		this.game.state.start("gameState");
+		this.game.state.start("setupState");
 	};
-
 	PreloadState.prototype.createTopLogo = function() {
 		var text = null;
 		var textReflect = null;
