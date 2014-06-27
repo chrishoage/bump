@@ -13,11 +13,8 @@ var Player = (function () {
 		this.movementSpeed = 10;
 		this.rotationRate = 15;
 
-<<<<<<< HEAD
 		this.cooldownTimeLeft = 15;
-=======
 		this.lives = 3;
->>>>>>> d48534a3fbc2e3b24b8942cb424fc3cd72c9a980
 
 		this.playerPowerUpActive = false;
 		this.playerPowerUpCooldown = false;
@@ -112,9 +109,11 @@ var Player = (function () {
 
 	Player.prototype.update = function () {
 		this.bar.clear();
-		var size = 80 * (this.cooldownTimeLeft / 15);
-		var posX = this.game.world.width - 100 - (125 * this.i);
-		this.createCooldownBar(posX, size, this.barColor);
+		if (this.alive) {
+			var size = 80 * (this.cooldownTimeLeft / 15);
+			var posX = this.game.world.width - 100 - (125 * this.i);
+			this.createCooldownBar(posX, size, this.barColor);
+		}
 	}
 
 	Player.prototype.loseLife = function () {
@@ -123,9 +122,13 @@ var Player = (function () {
 		if(this.lives <= 0) {
 			this.kill();
 		} else {
-			var scaleDown = this.game.add.tween(this.scale).to({ x: 0, y: 0}, 500, Phaser.Easing.Back.Out, true, 0, false, false)
+			this.body.rotateRight(500);
+			var scaleDown = this.game.add.tween(this.scale).to({x: 0, y: 0}, 500, Phaser.Easing.Back.Out, true, 0, false, false)
 			scaleDown.onComplete.add(function () {
-				console.log('respawn');
+				// respawn
+				this.scale.x = this.scale.y = 1;
+				this.body.x = this.game.rnd.integerInRange(saferect.left, saferect.right);
+				this.body.y = this.game.rnd.integerInRange(saferect.top, saferect.bottom);
 			}, this);
 		}
 	};

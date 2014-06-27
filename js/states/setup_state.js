@@ -65,9 +65,6 @@ var SetupState = (function () {
     	_this.game.add.sprite(50, 120+120*_this.players.length, playerImages.shift());
     });
 
-
-
-
     // TODO remove only for debugging
     this.game.input.onDown.add(function() {
       this.game.state.start("gameState");
@@ -78,7 +75,7 @@ var SetupState = (function () {
 		if (this.players.length && _.every(this.players, 'playerReady')) {
 			this.game.state.start("gameState");
 		}
-    
+
 	};
 
 	return SetupState;

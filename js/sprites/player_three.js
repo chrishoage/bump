@@ -21,10 +21,10 @@ var PlayerThree = (function () {
 			if (!this.teleported) {
 				this.teleported = true;
 				
-				this.game.state.states["gameState"].safeRectangle
+				var saferect = this.game.state.states["gameState"].safeRectangle;
 
-				this.body.x = this.game.world.randomX;
-				this.body.y = this.game.world.randomY;
+				this.body.x = this.game.rnd.integerInRange(saferect.left, saferect.right);
+				this.body.y = this.game.rnd.integerInRange(saferect.top, saferect.bottom);
 			}
 		} else {
 			this.teleported = false;
