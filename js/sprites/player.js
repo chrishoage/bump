@@ -10,12 +10,8 @@ var Player = (function () {
 
 		this.movementSpeed = 25;
 
+		this.game.physics.p2.enable(this);
 
-
-		this.game.physics.enable(this, Phaser.Physics.ARCADE);
-		this.body.collideWorldBounds = true;
-		this.body.maxVelocity.setTo(200, 200); // x, y
-		this.body.bounce.setTo(1, 1);
 	}
 
 	Player.prototype = Object.create(Phaser.Sprite.prototype);
