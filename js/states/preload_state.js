@@ -18,8 +18,11 @@ var PreloadState = (function () {
         this.game.load.setPreloadSprite(this.preloadBar);
 
         // load assets
-		this.game.load.image('player', 'assets/images/circle.png');
-		
+		this.game.load.image('player1', 'assets/images/player1.png');
+		this.game.load.image('player2', 'assets/images/player2.png');
+		this.game.load.image('player3', 'assets/images/player3.png');
+		this.game.load.image('player4', 'assets/images/player4.png');
+
 		this.game.stage.setBackgroundColor("#1192bd");
 	};
 
@@ -33,7 +36,7 @@ var PreloadState = (function () {
 	PreloadState.prototype.createTopLogo = function() {
 		var text = null;
 		var textReflect = null;
-		
+
 		text = this.game.add.text(this.game.world.centerX, this.game.world.centerY/3, "BUMP");
 
 	    //  Centers the text

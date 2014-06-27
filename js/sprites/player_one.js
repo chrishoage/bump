@@ -3,7 +3,7 @@ var PlayerOne = (function () {
 	var PlayerOne = function(game, x, y, asset, frame) {
 		x = x || game.world.centerX;
 		y = y || game.world.centerY;
-		asset = asset || 'player';
+		asset = asset || 'player1';
 	  Player.call(this, game, x, y, asset, frame);
 	}
 
