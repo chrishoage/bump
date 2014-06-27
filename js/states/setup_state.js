@@ -60,6 +60,7 @@ var SetupState = (function () {
     	var PlayerObject = playerObjects.shift();
     	var player = new PlayerObject(_this.game, 100*_this.players.length, _this.game.world.centerY);
     	console.log(player);
+    	player.playerIndex = _this.players.length;
     	player.setupConnection(conn);
     	_this.players.push(player);
     	_this.game.add.sprite(50, 120+120*_this.players.length, playerImages.shift());

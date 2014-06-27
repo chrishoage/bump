@@ -15,6 +15,7 @@ var Player = (function () {
 
 		this.cooldownTimeLeft = 15;
 		this.lives = 3;
+		this.isDead = false;
 
 		this.playerPowerUpActive = false;
 		this.playerPowerUpCooldown = false;
@@ -99,43 +100,55 @@ var Player = (function () {
 
 	};
 
-	Player.prototype.createCooldownBar = function (posX, size, color) {
-			this.bar = this.game.add.graphics(0,0);
-			this.bar.beginFill(color, 1);
-			this.bar.lineStyle(1, 0x000000, 1);
-			this.bar.drawRect(posX, 50, size, 10)
-			this.game.world.bringToTop(this.bar);
+	Player.prototype.createCooldownBar = function (size) {
+		var posX = this.game.world.width - 100 - (125 * this.playerIndex);
+		size = size || 80;
+		this.bar = this.game.add.graphics(0,0);
+		this.bar.beginFill(this.barColor, 1);
+		this.bar.lineStyle(1, 0x000000, 1);
+		this.bar.drawRect(posX, 50, size, 10)
+		this.game.world.bringToTop(this.bar);
 	}
+
+	Player.prototype.createLives = function () {
+		this.livesGroup = this.game.add.group();
+		for (var i = 0; i < 3; i++) {
+			console.log(this.playerIndex);
+			var tube = this.livesGroup.create(this.game.world.width - 100 + (30 * i) - (125 * this.playerIndex), 20, this.name+'-life');
+		};
+		console.log(this.livesGroup);
+	};
 
 	Player.prototype.update = function () {
 		this.bar.clear();
 		if (this.lives > 0) {
 			var size = 80 * (this.cooldownTimeLeft / 15);
-			var posX = this.game.world.width - 100 - (125 * this.i);
-			this.createCooldownBar(posX, size, this.barColor);
+			this.createCooldownBar(size);
 		}
 	}
 
-	Player.prototype.loseLife = function () {
-		this.lives--;
+	Player.prototype.loseLife = function (cb) {
+		this.livesGroup.children[--this.lives].destroy();
+		this.isDead = true;
 
 		if(this.lives <= 0) {
 			this.kill();
+			if (cb) cb();
 		} else {
 			this.body.rotateRight(500);
 			var scaleDown = this.game.add.tween(this.scale).to({x: 0, y: 0}, 500, Phaser.Easing.Back.Out, true, 0, false, false)
 			scaleDown.onComplete.add(function () {
 				// respawn
 				this.scale.x = this.scale.y = 1;
-
 				this.respawn();
+				if (cb) cb();
 			}, this);
 		}
 	};
 
 	Player.prototype.respawn = function () {
+		this.isDead = false;
 		var saferect = this.game.state.states["gameState"].safeRectangle;
-
 		this.body.x = this.game.rnd.integerInRange(saferect.left, saferect.right);
 		this.body.y = this.game.rnd.integerInRange(saferect.top, saferect.bottom);
 	};

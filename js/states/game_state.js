@@ -28,7 +28,6 @@ var GameState = (function () {
 	  this.players = this.game.state.states['setupState'].players;
 		this.createPlayingField();
 		this.createPlayers();
-		this.createLives();
 		this.establishCollisionGroup();
 	};
 
@@ -40,21 +39,13 @@ var GameState = (function () {
 			this.game.physics.p2.enable(player);
 			player.body.collideWorldBounds = true;
 			player.body.setCircle(32);
-			player.i = i;
 			player.smoothed = false;
-			player.createCooldownBar(this.game.world.width - 100 - (125 * i), 80, player.barColor);
+			player.createLives();
+			player.createCooldownBar();
 			this.game.add.existing(player);
 		}, this);
 	};
 
-	GameState.prototype.createLives = function () {
-		this.lives = this.game.add.group();
-		_.each(this.players, function (player, p) {
-			for (var i = 0; i < 3; i++) {
-				var tube = this.lives.create(this.game.world.width - 100 + (30 * i) - (125 * p), 20, player.name+'-life');
-			};
-		}, this);
-	};
 
 	GameState.prototype.createPlayingField = function () {
 		this.game.add.existing(new Lake(this.game));
@@ -206,24 +197,19 @@ var GameState = (function () {
 	};
 
 	GameState.prototype.playerHitsLand = function (player, land) {
+		if (player.sprite.isDead) return;
 		console.log("player hit land", player);
-		player.sprite.loseLife();
+		player.sprite.loseLife(function () {
+			// determine if game over
+			if (_.every(player.game.state.states['gameState'].players, 'isDead')) {
+				console.log('gameover');
+				var gameover = player.game.add.sprite(player.game.world.centerX-10,  player.game.world.centerY-50, 'game-over');
+	  	  gameover.anchor.set(0.5);
 
-		// determine if game over
-		var anyAlive = false;
-		_(player.game.state.states['gameState'].players).forEach(function (thisPlayer) {
-			if (thisPlayer.lives > 0) {
-				anyAlive = true;
+	  	  player.game.add.tween(gameover).from({y:-600},1000,Phaser.Easing.Bounce.Out,true, 100, false, false);
 			}
 		});
 
-		if (anyAlive === false) {
-			console.log('gameover');
-			var gameover = player.game.add.sprite(player.game.world.centerX-10,  player.game.world.centerY-50, 'game-over');
-	    gameover.anchor.set(0.5);
-
-	    player.game.add.tween(gameover).from({y:-600},1000,Phaser.Easing.Bounce.Out,true, 100, false, false);
-		}
 	};
 
 
