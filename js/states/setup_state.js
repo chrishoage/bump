@@ -25,11 +25,10 @@ var SetupState = (function () {
 		var playerImages = ['player1', 'player2', 'player3', 'player4'];
 		var playerObjects = [PlayerOne, PlayerTwo, PlayerThree, PlayerFour];
 
-    var style = { font: "65px Arial", fill: "#ff0044", align: "center" };
-    var smallStyle = { font: "35px Arial", fill: "#ff0044", align: "left" };
+    var style = { font: "65px Arial", fill: "#cf2127", align: "center" };
+    var smallStyle = { font: "20px Arial", fill: "#fff", align: "center" };
 
-    var t = this.game.add.text(0, 0, 'Bump!', style);
-    var t = this.game.add.text(0, 100, 'Use the QR Code to connect\nyour phone to use as a controller.\nRemember to lock your device orientation!', smallStyle);
+    var t = this.game.add.text(180, this.game.world.height-50, 'Use the QR Code to connect your phone to use as a controller, remember to lock your device orientation!', smallStyle);
 
 		var qrHost = this.game.add.sprite(this.game.world.centerX-10,  this.game.world.centerY-50, 'bump-title');
     qrHost.anchor.set(0.5);
@@ -51,7 +50,7 @@ var SetupState = (function () {
     var qrSprite = this.game.add.sprite(qrSpritePosX, qrSpritePosY, 'qr-code');
     qrSprite.crop(new Phaser.Rectangle(0,0,qrSpriteWidth,qrSpriteHeight));
     qrSprite.alpha=0;
-    this.game.add.tween(qrSprite).to({alpha:1}, 2000, Phaser.Easing.Linear.None,true, 1600, false, false);
+    this.game.add.tween(qrSprite).to({alpha:1}, 2000, Phaser.Easing.Linear.None,true, 1800, false, false);
 
     var _this = this;
 
