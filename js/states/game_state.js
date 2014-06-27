@@ -201,11 +201,15 @@ var GameState = (function () {
 		console.log("player hit land", player);
 		player.sprite.loseLife(function () {
 			// determine if game over
-			if (_.every(player.game.state.states['gameState'].players, 'isDead')) {
+			var winner = _.where(player.game.state.states['gameState'].players, {'isDead': true});
+			if (winner.length <= 1) {
 				console.log('gameover');
 				var gameover = player.game.add.sprite(player.game.world.centerX-10,  player.game.world.centerY-10, 'game-over');
 	  	  gameover.anchor.set(0.5);
-
+	  	  if(winner.length == 1) {
+	  	  	player.game.add.sprite(player.game.world.centerX, player.game.world.centerY, winner[0].name);
+	  	  }
+	  	  
 	  	  player.game.add.tween(gameover).from({y:-600},1000,Phaser.Easing.Bounce.Out,true, 100, false, false);
 			}
 		});
