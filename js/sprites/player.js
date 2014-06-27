@@ -13,6 +13,8 @@ var Player = (function () {
 		this.movementSpeed = 10;
 		this.rotationRate = 15;
 
+		this.cooldownTimeLeft = 15;
+
 		this.playerPowerUpActive = false;
 		this.playerPowerUpCooldown = false;
 	}
@@ -82,14 +84,35 @@ var Player = (function () {
 			this.playerPowerUpActive = false;
 			this.playerPowerUpCooldown = true;
 			console.log('cool down started')
+			var s = 10;
+			this.game.time.events.repeat(Phaser.Timer.SECOND, 15, function () {
+				this.cooldownTimeLeft--;
+  		}, this);
 			this.game.time.events.add(Phaser.Timer.SECOND * 15, function() {
 				this.playerPowerUpActive = false;
 				this.playerPowerUpCooldown = false;
+				this.cooldownTimeLeft = 15;
 				console.log('cool down over');
 			}, this);
 		}, this);
 
 	};
+
+	Player.prototype.createCooldownBar = function (posX, size, color) {
+			this.bar = this.game.add.graphics(0,0);
+			this.bar.beginFill(color, 1);
+			this.bar.lineStyle(1, 0x000000, 1);
+			this.bar.drawRect(posX, 50, size, 10)
+			this.game.world.bringToTop(this.bar);
+	}
+
+	Player.prototype.update = function () {
+		this.bar.clear();
+		var size = 80 * (this.cooldownTimeLeft / 15);
+		var posX = this.game.world.width - 100 - (125 * this.i);
+		this.createCooldownBar(posX, size, this.barColor);
+	}
+
 
 	return Player;
 

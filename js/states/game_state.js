@@ -26,18 +26,20 @@ var GameState = (function () {
 		this.createPlayingField();
 		this.createPlayers();
 		this.createLives();
+		//this.createCooldownBars();
 	};
 
 	GameState.prototype.createPlayers = function () {
 		var _this = this;
 		console.log('existing players', this.game.state.states['setupState'].players);
-		_.each(this.players, function (player) {
+		_.each(this.players, function (player, i) {
 			console.log(player);
 			this.game.physics.p2.enable(player);
 			player.body.collideWorldBounds = true;
 			player.body.setCircle(32);
-
+			player.i = i;
 			player.smoothed = false;
+			player.createCooldownBar(this.game.world.width - 100 - (125 * i), 80, player.barColor);
 			this.game.add.existing(player);
 		}, this);
 	};
@@ -48,7 +50,6 @@ var GameState = (function () {
 			for (var i = 0; i < 3; i++) {
 				var tube = this.lives.create(this.game.world.width - 100 + (30 * i) - (125 * p), 20, player.name+'-life');
 			};
-			console.log(player.name+'-life', tube);
 		}, this);
 	};
 
@@ -71,9 +72,9 @@ var GameState = (function () {
 		this.top_right_land.body.clearShapes();
 		this.top_right_land.body.loadPolygon('physicsDataCorners', 'land-top-right');
 
-		this.top_right_land.body.motionState = 
-		this.top_left_land.body.motionState = 
-		this.bottom_right_land.body.motionState = 
+		this.top_right_land.body.motionState =
+		this.top_left_land.body.motionState =
+		this.bottom_right_land.body.motionState =
 		this.bottom_left_land.body.motionState = Phaser.Physics.P2.Body.STATIC;
 
 		var starting_x = 300;

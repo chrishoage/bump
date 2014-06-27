@@ -30,6 +30,11 @@ var PreloadState = (function () {
 		this.game.load.image('player2-life', 'assets/images/life-player2.png');
 		this.game.load.image('player3-life', 'assets/images/life-player3.png');
 		this.game.load.image('player4-life', 'assets/images/life-player4.png');
+		this.game.load.image('bg-cooldown', 'assets/images/cooldown-empty.png');
+		this.game.load.image('player1-cooldown', 'assets/images/cooldown-player1.png');
+		this.game.load.image('player2-cooldown', 'assets/images/cooldown-player2.png');
+		this.game.load.image('player3-cooldown', 'assets/images/cooldown-player3.png');
+		this.game.load.image('player4-cooldown', 'assets/images/cooldown-player4.png');
     this.game.load.image('lake', 'assets/images/water.gif');
     this.game.load.image('land-bottom-left', 'assets/images/land/bottom-left.png');
     this.game.load.image('land-bottom-right', 'assets/images/land/bottom-right.png');
@@ -41,11 +46,6 @@ var PreloadState = (function () {
     for (var i = 1; i <= this.numberLandSides; i++) {
       this.game.load.image('land-side-'+ i, 'assets/images/land/side-' + i + '.png');
     }
-
-    this.game.load.image('cool-down-empty', 'assets/images/cool-down-empty.png');
-    this.game.load.image('cool-down-green', 'assets/images/cool-down-green.png');
-    this.game.load.image('cool-down-red', 'assets/images/cool-down-red.png');
-    this.game.load.image('cool-down-yellow', 'assets/images/cool-down-yellow.png');
 
     this.game.load.physics('physicsDataSides', 'assets/json/sides.json');
     this.game.load.physics('physicsDataCorners', 'assets/json/corners.json');
