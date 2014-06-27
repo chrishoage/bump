@@ -19,7 +19,7 @@ var GameState = (function () {
 
 	GameState.prototype.create = function () {
     this.game.physics.startSystem(Phaser.Physics.P2JS);
-    this.game.physics.p2.defaultRestitution = 5;
+    this.game.physics.p2.defaultRestitution = 0.8;
     this.game.physics.p2.applyGravity = false;
 
 	  this.players = this.game.state.states['setupState'].players;
@@ -69,7 +69,7 @@ var GameState = (function () {
 
 	GameState.prototype.update = function () {
 		_.each(this.players, function (player) {
-			player.body.thrust(100);
+			/*player.body.thrust(100);*/
 			//this.game.physics.arcade.collide(player, this.players);
 		}, this);
 
