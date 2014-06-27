@@ -58,12 +58,18 @@ var SetupState = (function () {
     var _this = this;
     peer.on('connection', function (conn) {
     	var PlayerObject = playerObjects.shift();
-    	var player = new PlayerObject(_this.game, 100*_this.players.length, _this.game.world.centerY);
+    	var saferect = _this.game.state.states["gameState"].safeRectangle;
+    	var player = new PlayerObject(_this.game, _this.game.rnd.integerInRange(saferect.left, saferect.right), _this.game.world.centerY);
     	console.log(player);
     	player.playerIndex = _this.players.length;
     	player.setupConnection(conn);
     	_this.players.push(player);
     	_this.game.add.sprite(50, 120+120*_this.players.length, playerImages.shift());
+    	conn.on('open', function () {
+    		conn.send({
+    			color: '#'+player.barColor.toString(16)
+    		})
+    	})
     });
 
     // TODO remove only for debugging

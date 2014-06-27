@@ -13,6 +13,14 @@
 			console.log(game);
 		});
 
+		peer.on('error', function (err) {
+			if (err.type === 'browser-incompatible') {
+				alert('Sorry, but you must use a recent version of Chrome or Firefox (no iOS devices!)')
+			} else {
+				console.error(err);
+			}
+		});
+
 	}, true);
 
 }).call(this);

@@ -133,13 +133,15 @@
 					var conn = peer.connect(connectTo);
 					if (!conn) return alert('Error: There was an error connecting to the game');
 					conn.on('open', function () {
+						conn.on('data', function (data) {
+							$controller.style.background = data.color;
+						});
 						var setupController = function (event) {
 
 							$controller.removeEventListener('click', setupController, false);
 							var el = document.documentElement,
 									rfs = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen;
 							rfs.call(el);
-							this.style.background = 'green';
 							conn.send({
 								type: 'start',
 								timeStamp: event.timeStamp
@@ -169,6 +171,14 @@
 						}
 						$controller.addEventListener('click', setupController, false);
 					});
+				});
+
+				peer.on('error', function (err) {
+					if (err.type === 'browser-incompatible') {
+						alert('Sorry, but you must use a recent version of Chrome or Firefox (no iOS devices!)')
+					} else {
+						console.error(err);
+					}
 				});
 			}, true);
 

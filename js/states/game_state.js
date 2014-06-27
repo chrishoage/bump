@@ -203,7 +203,7 @@ var GameState = (function () {
 			// determine if game over
 			if (_.every(player.game.state.states['gameState'].players, 'isDead')) {
 				console.log('gameover');
-				var gameover = player.game.add.sprite(player.game.world.centerX-10,  player.game.world.centerY-50, 'game-over');
+				var gameover = player.game.add.sprite(player.game.world.centerX-10,  player.game.world.centerY-10, 'game-over');
 	  	  gameover.anchor.set(0.5);
 
 	  	  player.game.add.tween(gameover).from({y:-600},1000,Phaser.Easing.Bounce.Out,true, 100, false, false);
