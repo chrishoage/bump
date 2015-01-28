@@ -12,7 +12,7 @@ var SetupState = (function () {
 
 	SetupState.prototype.preload = function () {
 			var dataURI = qr.toDataURL({
-			     value:'http://' + location.host + location.pathname + '/controller.html#' + peer.id,
+			     value:'http://' + location.host + location.pathname + 'controller.html#' + peer.id,
 			      size:100
 			    });
 			var data = new Image();

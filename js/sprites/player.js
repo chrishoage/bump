@@ -56,6 +56,7 @@ var Player = (function () {
 
 
 		var vel = this.body.velocity;
+		if (!vel) return;
 		var speed = Math.sqrt(vel.x*vel.x + vel.y*vel.y);
 
 		//logic to calculate the angle from accelerometer data
