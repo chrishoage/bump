@@ -1,0 +1,37 @@
+{
+  "name": "bump",
+  "version": "0.1.0",
+  "description": "Browser based game using a mobile device for a controller\" ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chrishoage/bump.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chrishoage/bump/issues"
+  },
+  "homepage": "https://github.com/chrishoage/bump",
+  "devDependencies": {
+    "browserify": "^8.1.1",
+    "del": "^1.1.1",
+    "gulp": "^3.8.10",
+    "gulp-connect": "^2.2.0",
+    "gulp-if": "^1.2.5",
+    "gulp-util": "^3.0.2",
+    "run-sequence": "^1.0.2",
+    "vinyl-paths": "^1.0.0",
+    "vinyl-source-stream": "^1.0.0",
+    "watchify": "^2.2.1"
+  },
+  "dependencies": {
+    "lodash": "^3.0.0",
+    "peerjs": "^0.3.14",
+    "phaser": "git://github.com/notnullgames/phaser",
+    "qr-js": "git://github.com/chrishoage/qr.js"
+  }
+}
