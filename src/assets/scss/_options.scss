@@ -37,6 +37,10 @@ input {
 	text-align: center;
 	box-sizing: border-box;
 
+	&.selected {
+		opacity: 0.3;
+	}
+
 	img {
 		margin: 10px 0;
 	}

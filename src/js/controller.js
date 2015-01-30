@@ -3,7 +3,7 @@ var _    = require('lodash');
 var orentationLock = require('./utils/orentationLock');
 // I want this to fire before everything else loads
 var $controller = document.getElementById('controller');
-var $setup = document.getElementById('setup');
+var $setup = document.getElementById('player-setup');
 
 var setSize = function () {
 	$controller.style.width = window.innerWidth+'px';
@@ -14,11 +14,10 @@ var setSize = function () {
 
 console.log('hello from controller.js');
 
-setSize();
 
 
 var $body = document.body;
-setSize();
+//setSize();
 
 var orientation = function () {
 	var o = 0;
@@ -41,6 +40,12 @@ var orientation = function () {
 	return o;
 };
 
+var states = {
+	'player-setup': function (data) {
+		$setup.style.display = 'block';
+	}
+}
+
 peer.on('open', function(id) {
 	var connectTo = null;
 	var started = false;
@@ -50,8 +55,7 @@ peer.on('open', function(id) {
 	if (!conn) return alert('Error: There was an error connecting to the game');
 	conn.on('open', function () {
 		conn.on('data', function (data) {
-			$controller.style.backgroundColor = data.color,
-			$setup.className = data.playerName
+
 		});
 		var setupController = function (event) {
 
