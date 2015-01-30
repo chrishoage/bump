@@ -1,4 +1,0 @@
-bump
-====
-
-Bump Game
