@@ -30,6 +30,10 @@
 	@extend %default-button;
 	background-color: $p1;
 	border: 3px solid $p1-accent;
+}
 
-	
+.start-btn {
+	@extend %default-button;
+	background-color: $p4;
+	border: 3px solid $p4-accent;
 }
