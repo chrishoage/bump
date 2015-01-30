@@ -1,0 +1,29 @@
+h1 {
+	@extend %h-type;
+	font-size: 2.4em;
+}
+
+h2 {
+	@extend %h-type;
+	font-size: 1em;
+}
+
+%h-type {
+	display: inline-block;
+	margin: 0 0 0 15px;
+	letter-spacing: 2px;
+}
+
+.playernum {
+	font-family: georgia, serif;
+	font-style: italic;
+	text-transform: none;
+	font-weight: lighter;
+	margin: 15px 0 5px;
+}
+
+.skill {
+	margin: 0;
+	display: block;
+	font-size: 1.3em;
+}
