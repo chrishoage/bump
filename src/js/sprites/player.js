@@ -30,7 +30,7 @@ Player.prototype.setupConnection = function (connection) {
 	var _this = this;
 	this.peerConn = connection;
 	this.peerConn.on('data', function (data) {
-		console.log('player data', data);
+
 		if (data.type === 'powerup') {
 			if (_this.playerReady) {
 				_this.triggerPowerUp();
@@ -38,50 +38,34 @@ Player.prototype.setupConnection = function (connection) {
 			}
 		} else if (data.type === 'start') {
 				_this.playerReady = true;
-		} else if (data.type === 'devicemotion') {
+		} else {
 			// device motion stuff here
-			_this.movePlayerAcel(data);
-		} else if (data.type === 'rotate-left') {
-			_this.body.rotateLeft(_this.rotationRate);
-		} else if (data.type === 'rotate-right') {
-			_this.body.rotateRight(_this.rotationRate);
+			_this.movePlayer(data);
 		}
 	});
 };
 
-Player.prototype.movePlayerAcel = function (data) {
-	var aig = data.accelerationIncludingGravity;
-	var accel = {
-		x: data.orientation ? aig.x : aig.y,
-		y: data.orientation ? aig.y : aig.x
-	}
-	/*this.body.velocity.x += (accel.x  / 10) * this.movementSpeed;
-	this.body.velocity.y += (accel.y  / 10) * this.movementSpeed;*/
-
-	//logic to calculate the tilt value of the accelerometer (0-10)
-	var distance = Math.sqrt(accel.x*accel.x + accel.y*accel.y) * this.movementSpeed;
-
+Player.prototype.movePlayer = function (data) {
 	if (!this.body) return;
 
-	var vel = this.body.velocity;
-	if (!vel) return;
-	var speed = Math.sqrt(vel.x*vel.x + vel.y*vel.y);
-
-	//logic to calculate the angle from accelerometer data
-	var rotating = (Math.abs(accel.x) > 5);
-	if(accel.x>0 && accel.y>0) {
-	  this.body.reverse(distance);
-	  //if(rotating) this.body.rotateRight(this.rotationRate)
-	}else if(accel.x<0 && accel.y>0) {
-	  //if(rotating) this.body.rotateLeft(this.rotationRate)
-	  this.body.reverse(distance);
-	}else if(accel.x<0 && accel.y<0) {
-	  //if(rotating) this.body.rotateLeft(this.rotationRate)
-	  this.body.thrust(distance)
-	}else if(accel.x>0 && accel.y<0) {
-	   //if(rotating) this.body.rotateRight(this.rotationRate)
-	   this.body.thrust(distance)
+	if (data.type === 'rotate-left') {
+		this.body.rotateLeft(this.rotationRate);
+		console.log('rotate left')
+	} else if (data.type === 'rotate-right') {
+		this.body.rotateRight(this.rotationRate);
+		console.log('rotate right')
+	} else if (data.type === 'devicemotion') {
+		//logic to calculate the tilt value of the accelerometer (0-10)
+		var aig = data.accelerationIncludingGravity;
+		var distance = Math.sqrt(aig.x*aig.x + aig.y*aig.y) * this.movementSpeed;
+		if (aig.x > 0) {
+			this.body.reverse(distance);
+		} else {
+			this.body.thrust(distance);
+		}
 	}
+
+	//console.log('movePlayer', aig);
 
 };
 

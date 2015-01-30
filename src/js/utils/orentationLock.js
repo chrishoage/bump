@@ -1,3 +1,4 @@
+var orentationLocked = false;
 
 function currentOrientation () {
 	return window.screen.orientation || window.screen.mozOrientation || window.screen.msOrientation;
@@ -5,7 +6,7 @@ function currentOrientation () {
 
 function orentationLock (orientation) {
 	var lockOrientation = window.screen.lockOrientation || window.screen.mozLockOrientation || window.screen.msLockOrientation;
-
+	if (orentationLocked) Promise.resolve();
 	if (currentOrientation() === orientation) Promise.resolve();
 	if (!lockOrientation && screen.orientation.lock) {
 		return window.screen.orientation.lock(orientation);
@@ -16,6 +17,7 @@ function orentationLock (orientation) {
 				console.log(currentOrientation(), orientation);
 				if (!res) return reject(orientation);
 				if (currentOrientation() === orientation) resolve(orientation); else reject(orientation);
+				orentationLocked = true;
 			}, 0);
 		});
 	} else {
