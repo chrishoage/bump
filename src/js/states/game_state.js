@@ -193,8 +193,8 @@ GameState.prototype.createPlayingField = function () {
 GameState.prototype.establishCollisionGroup = function () {
 	var _this = this;
 
-	_(this.landElements).forEach(function(landElement) {
-		_(_this.players).forEach(function(player) {
+	_.each(this.landElements, function(landElement) {
+		_.each(_this.players, function(player) {
 			player.body.createBodyCallback(landElement, _this.playerHitsLand);
 		});
 	});
@@ -203,9 +203,9 @@ GameState.prototype.establishCollisionGroup = function () {
 };
 
 GameState.prototype.playerHitsLand = function (player, land) {
+	console.log("player hit land", player);
 	var _this = player.game.state.states['gameState'];
 	if (player.sprite.isDead || _this.gameOver) return;
-	console.log("player hit land", player);
 	player.sprite.loseLife(function () {
 		// determine if game over
 		var winner = _.where(_this.players, {'isDead': false});

@@ -2,9 +2,11 @@ var peer = require('./instance/peer');
 var _    = require('lodash');
 var orentationLock = require('./utils/orentationLock');
 // I want this to fire before everything else loads
-var $controller = document.getElementById('controller');
-var $players    = document.querySelectorAll('#player-setup .player-box');
-var $setup      = document.getElementById('player-setup');
+var $controller  = document.getElementById('controller');
+var $players     = document.querySelectorAll('#player-setup .player-box');
+var $resetPlayer = document.querySelector('#player-setup .reset-btn');
+var $playerReady = document.querySelector('#player-setup .ready-btn');
+var $setup       = document.getElementById('player-setup');
 var conn;
 var selectedPlayer = null;
 var setSize = function () {
@@ -14,8 +16,22 @@ var setSize = function () {
 	//$setup.style.height = window.innerWidth+'px';
 }
 
+document.querySelector('form').addEventListener('submit', function (event) {
+	event.preventDefault();
+}, true);
+
 console.log('hello from controller.js');
 
+function getUserName () {
+	return document.getElementById('username').value;
+}
+
+function isDocumentInFullScreenMode() {
+  // Note that the browser fullscreen (triggered by short keys) might
+  // be considered different from content fullscreen when expecting a boolean
+  return ((document.fullscreenElement && document.fullscreenElement !== null) ||    // alternative standard methods
+      document.mozFullScreen || document.webkitIsFullScreen);                   // current working methods
+}
 
 
 var $body = document.body;
@@ -41,8 +57,16 @@ var orientation = function () {
 
 	return o;
 };
-
+//		document.querySelector('.reset-btn').
 var handlers = {
+	'reset-player': function (event) {
+		event.preventDefault();
+		conn.send({
+			type: 'unpick-player',
+			player: selectedPlayer
+		});
+		selectedPlayer = null;
+	},
 	'pick-player': function () {
 		if (selectedPlayer) return;
 		var player = this.id;
@@ -50,8 +74,21 @@ var handlers = {
 		selectedPlayer = player;
 		conn.send({
 			type: 'pick-player',
-			player: player
+			player: player,
+			userName: getUserName()
 		})
+	},
+	'player-ready': function (event) {
+		if (!isDocumentInFullScreenMode()) {
+			var el = document.documentElement,
+			rfs = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen;
+			rfs.call(el);
+		}
+
+		conn.send({
+			type: 'start',
+			timeStamp: event.timeStamp
+		});
 	}
 }
 
@@ -60,50 +97,26 @@ var states = {
 		$setup.style.display = 'block';
 		_.each($players, function (player) {
 			console.log('player', player);
+			$resetPlayer.removeEventListener('click', handlers['reset-player']);
+			$playerReady.removeEventListener('click', handlers['player-ready']);
 			player.removeEventListener('click', handlers['pick-player']);
 			if (_.indexOf(data.playingPlayers, player.id) === -1) {
 				player.classList.remove('selected');
 			} else {
 				player.classList.add('selected');
 			}
+			$resetPlayer.addEventListener('click', handlers['reset-player']);
+			$playerReady.addEventListener('click', handlers['player-ready']);
 			player.addEventListener('click', handlers['pick-player']);
 		});
-	}
-}
-
-peer.on('open', function(id) {
-	var connectTo = null;
-	var started = false;
-	if (location.hash) connectTo = location.hash.slice(1);
-	if (!connectTo) return alert('Error: No Connection Code Supplied');
-	conn = peer.connect(connectTo);
-	if (!conn) return alert('Error: There was an error connecting to the game');
-	conn.on('open', function () {
-		conn.on('data', function (data) {
-			console.log('client recieved data', data);
-			states[data.type](data);
-		});
-		var setupController = function (event) {
-
-			$controller.removeEventListener('click', setupController, false);
-			var el = document.documentElement,
-					rfs = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen;
-			rfs.call(el);
-			var setOrentation = function () {
-				orentationLock('landscape-primary').then(function() {
-					console.log('sucess');
-				}, function() {
-					console.log('fail');
-				});
-			};
-			document.addEventListener("fullscreenchange", setOrentation);
-			document.addEventListener("mozfullscreenchange", setOrentation);
-			document.addEventListener("webkitfullscreenchange", setOrentation);
-			document.addEventListener("msfullscreenchange", setOrentation);
-			conn.send({
-				type: 'start',
-				timeStamp: event.timeStamp
-			});
+	},
+	'game-start': function (data) {
+		orentationLock('landscape-primary').then(function() {
+			console.log('sucess');
+			$setup.style.display = 'none';
+			$controller.style.display = 'block';
+			$controller.style.backgroundColor = data.color;
+			document.getElementById('displayName').innerHTML = data.userName;
 			window.addEventListener('click', function (event) {
 					conn.send({
 						type: 'click',
@@ -126,8 +139,26 @@ peer.on('open', function(id) {
 					timeStamp: event.timeStamp
 				});
 			}, true);
-		}
-		$controller.addEventListener('click', setupController, false);
+		}, function() {
+			alert('Sorry, the orientation could not be locked');
+			console.log('fail');
+		});
+
+	}
+}
+
+peer.on('open', function(id) {
+	var connectTo = null;
+	var started = false;
+	if (location.hash) connectTo = location.hash.slice(1);
+	if (!connectTo) return alert('Error: No Connection Code Supplied');
+	conn = peer.connect(connectTo);
+	if (!conn) return alert('Error: There was an error connecting to the game');
+	conn.on('open', function () {
+		conn.on('data', function (data) {
+			console.log('client recieved data', data);
+			states[data.type](data);
+		});
 	});
 });
 

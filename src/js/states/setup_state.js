@@ -32,9 +32,17 @@ SetupState.prototype.preload = function () {
 		this.game.cache.addImage('qr-code', dataURI, data);
 };
 
+SetupState.prototype.sendToPlayers = function (payload) {
+	var b = typeof payload === 'function';
+	_.each(this.players, function (player) {
+		player.peerConn.send(b ? payload(player) : payload);
+	});
+}
+
 SetupState.prototype.create = function () {
    this.game.add.existing(new Lake(this.game));
 
+  var playerSprites = [];
   var playingPlayers = [];
 	var playerImages = ['player1', 'player2', 'player3', 'player4'];
 	var playerObjects = [PlayerOne, PlayerTwo, PlayerThree, PlayerFour];
@@ -77,7 +85,6 @@ SetupState.prototype.create = function () {
 			});
 		});
 		conn.on('data', function (data) {
-			console.log(data);
 			if (data.type === 'pick-player') {
 				var playerIndex = _.indexOf(playerImages, data.player);
 				playingPlayers.push(playerImages[playerIndex]);
@@ -87,35 +94,31 @@ SetupState.prototype.create = function () {
 				var player = new PlayerObject(_this.game, _this.game.rnd.integerInRange(saferect.left, saferect.right), _this.game.world.centerY);
 				player.playerIndex = _this.players.length;
 				player.setupConnection(conn);
+				player.userName = data.userName;
 				_this.players.push(player);
-				_this.game.add.sprite(50, 120+120*_this.players.length, playerImages[playerIndex]);
-				_.each(_this.players, function (player) {
-					player.peerConn.send({
-						type: 'player-setup',
-					  playingPlayers: playingPlayers
-					});
+				playerSprites.push(_this.game.add.sprite(50, 120+120*_this.players.length, playerImages[playerIndex]));
+				_this.sendToPlayers({
+					type: 'player-setup',
+				  playingPlayers: playingPlayers
 				});
 
 			}
 
+			if (data.type === 'unpick-player') {
+				var playerIndex = _.indexOf(playingPlayers, data.player);
+				_.pullAt(playingPlayers, playerIndex);
+				var sprite = _.pullAt(playerSprites, playerIndex);
+				console.log('unpick-player', playerIndex, sprite);
+				sprite[0].destroy();
+				_this.sendToPlayers({
+					type: 'player-setup',
+				  playingPlayers: playingPlayers
+				});
+				_.pullAt(_this.players, playerIndex);
+			}
+
 		});
    });
-   // peer.on('connection', function (conn) {
-   // 	var PlayerObject = playerObjects.shift();
-   // 	var saferect = _this.game.state.states["gameState"].safeRectangle;
-   // 	var player = new PlayerObject(_this.game, _this.game.rnd.integerInRange(saferect.left, saferect.right), _this.game.world.centerY);
-   // 	console.log(player);
-   // 	player.playerIndex = _this.players.length;
-   // 	player.setupConnection(conn);
-   // 	_this.players.push(player);
-   // 	_this.game.add.sprite(50, 120+120*_this.players.length, playerImages.shift());
-   // 	conn.on('open', function () {
-   // 		conn.send({
-   //       playerName: player.name,
-   // 			color: '#'+player.barColor.toString(16)
-   // 		})
-   // 	})
-   // });
 
    // full screen on click
    this.game.input.onDown.add(function() {
@@ -125,6 +128,14 @@ SetupState.prototype.create = function () {
 
 SetupState.prototype.update = function () {
 	if (this.players.length && _.every(this.players, 'playerReady')) {
+		this.sendToPlayers(function (player) {
+			return {
+				type: 'game-start',
+				playerName: player.name,
+				userName: player.userName,
+				color: '#'+player.barColor.toString(16)
+			}
+		});
 		this.game.state.start("gameState");
 	}
 };
