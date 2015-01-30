@@ -14,7 +14,7 @@ var PlayerOne   = require('../sprites/player_one'),
 
 function SetupState (game, x, y, asset, frame) {
    this.lake = null;
-   this.players = [];
+   this.players = this.players || [];
 
   Phaser.State.call(this, game);
 }
@@ -39,13 +39,16 @@ SetupState.prototype.sendToPlayers = function (payload) {
 	});
 }
 
+SetupState.prototype.playingPlayers = function() {
+	return _.map(this.players, function(player) { return player.name});
+};
+
 SetupState.prototype.create = function () {
    this.game.add.existing(new Lake(this.game));
 
-  var playerSprites = [];
-  var playingPlayers = [];
-	var playerImages = ['player1', 'player2', 'player3', 'player4'];
-	var playerObjects = [PlayerOne, PlayerTwo, PlayerThree, PlayerFour];
+  this.playerSprites = [];
+	this.playerImages = ['player1', 'player2', 'player3', 'player4'];
+	this.playerObjects = [PlayerOne, PlayerTwo, PlayerThree, PlayerFour];
 
    var style = { font: "65px Arial", fill: "#cf2127", align: "center" };
    var smallStyle = { font: "20px Arial", fill: "#fff", align: "center" };
@@ -77,42 +80,52 @@ SetupState.prototype.create = function () {
    this.game.add.tween(qrSprite).to({alpha:1}, 2000, Phaser.Easing.Linear.None, 1800);
 
    var _this = this;
+
+   if (this.players) {
+   	this.sendToPlayers({
+   		type: 'player-setup',
+   	  playingPlayers: _this.playingPlayers()
+   	});
+   	_.each(this.players, function (player) {
+   		var playerIndex = _.indexOf(this.playerImages, player.name);
+   		this.playerSprites.push(this.game.add.sprite(50, 120+120*this.players.length, this.playerImages[playerIndex]));
+   	}, this);
+   }
+
    peer.on('connection', function (conn) {
 		conn.on('open', function () {
 			conn.send({
 				type: 'player-setup',
-		    playingPlayers: playingPlayers
+		    playingPlayers: _this.playingPlayers()
 			});
 		});
 		conn.on('data', function (data) {
 			if (data.type === 'pick-player') {
-				var playerIndex = _.indexOf(playerImages, data.player);
-				playingPlayers.push(playerImages[playerIndex]);
-				var PlayerObject = playerObjects[playerIndex];
+				var playerIndex = _.indexOf(_this.playerImages, data.player);
+				var PlayerObject = _this.playerObjects[playerIndex];
 				var saferect = _this.game.state.states["gameState"].safeRectangle;
-				console.log(PlayerObject, playerIndex, playerObjects, playerObjects[playerIndex]);
+				console.log(PlayerObject, playerIndex, _this.playerObjects, _this.playerObjects[playerIndex]);
 				var player = new PlayerObject(_this.game, _this.game.rnd.integerInRange(saferect.left, saferect.right), _this.game.world.centerY);
 				player.playerIndex = _this.players.length;
 				player.setupConnection(conn);
 				player.userName = data.userName;
 				_this.players.push(player);
-				playerSprites.push(_this.game.add.sprite(50, 120+120*_this.players.length, playerImages[playerIndex]));
+				_this.playerSprites.push(_this.game.add.sprite(50, 120+120*_this.players.length, _this.playerImages[playerIndex]));
 				_this.sendToPlayers({
 					type: 'player-setup',
-				  playingPlayers: playingPlayers
+				  playingPlayers: _this.playingPlayers()
 				});
 
 			}
 
 			if (data.type === 'unpick-player') {
-				var playerIndex = _.indexOf(playingPlayers, data.player);
-				_.pullAt(playingPlayers, playerIndex);
-				var sprite = _.pullAt(playerSprites, playerIndex);
+				var playerIndex = _.indexOf(_this.playingPlayers(), data.player);
+				var sprite = _.pullAt(_this.playerSprites, playerIndex);
 				console.log('unpick-player', playerIndex, sprite);
 				sprite[0].destroy();
 				_this.sendToPlayers({
 					type: 'player-setup',
-				  playingPlayers: playingPlayers
+				  playingPlayers: _.without(_this.playingPlayers(), data.player)
 				});
 				_.pullAt(_this.players, playerIndex);
 			}
@@ -135,6 +148,9 @@ SetupState.prototype.update = function () {
 				userName: player.userName,
 				color: '#'+player.barColor.toString(16)
 			}
+		});
+		_.each(this.playerSprites, function (sprite) {
+			sprite.destroy();
 		});
 		this.game.state.start("gameState");
 	}

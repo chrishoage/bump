@@ -220,6 +220,13 @@ GameState.prototype.playerHitsLand = function (player, land) {
   	  }
 
   	  player.game.add.tween(gameover).from({y:-600},1000,Phaser.Easing.Bounce.Out,true, 100, false, false);
+  	  setTimeout(function() {
+  	  	_.each(_this.players, function (player, i) {
+  	  		player.playerReady = false;
+  	  	});
+  	  	console.log('restart game');
+  	  	_this.game.state.start("setupState");
+  	  }, 3000)
 		}
 	});
 

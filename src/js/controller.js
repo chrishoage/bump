@@ -3,25 +3,24 @@ var _    = require('lodash');
 var Hammer = require('hammerjs');
 var orentationLock = require('./utils/orentationLock');
 // I want this to fire before everything else loads
-var $controller  = document.getElementById('controller');
-var $players     = document.querySelectorAll('#player-setup .player-box');
-var $resetPlayer = document.querySelector('#player-setup .reset-btn');
-var $playerReady = document.querySelector('#player-setup .ready-btn');
-var $setup       = document.getElementById('player-setup');
-var $rotateLeft = new Hammer(document.getElementById('rotate-left'));
-var $rotateRight = new Hammer(document.getElementById('rotate-right'));
-var $powerUp = new Hammer(document.getElementById('power-up'));
+var $controller   = document.getElementById('controller');
+var $players      = document.querySelectorAll('#player-setup .player-box');
+var $resetPlayer  = document.querySelector('#player-setup .reset-btn');
+var $playerReady  = document.querySelector('#player-setup .ready-btn');
+var $startGame    = document.getElementById('start-game');
+var $startGameBtn = document.querySelector('#start-game .start-btn');
+var $setup        = document.getElementById('player-setup');
+var $rotateLeft   = new Hammer(document.getElementById('rotate-left'));
+var $rotateRight  = new Hammer(document.getElementById('rotate-right'));
+var $powerUp      = new Hammer(document.getElementById('power-up'));
+var rotateLeftInterval, rotateRightInterval;
 
-
-$rotateLeft.add(new Hammer.Press({
+$rotateLeft.get('press').set({
 	time: 100
-}));
-$rotateRight.add(new Hammer.Press({
+});
+$rotateRight.get('press').set({
 	time: 100
-}));
-$powerUp.add(new Hammer.Press({
-	time: 100
-}));
+});
 
 var conn;
 var selectedPlayer = null;
@@ -95,12 +94,28 @@ var handlers = {
 		})
 	},
 	'player-ready': function (event) {
+		var startTheGame = function() {
+			console.log('sucess');
+			$setup.style.display = 'none';
+			$startGame.style.display = 'block';
+			$startGameBtn.addEventListener('click', handlers['start-game']);
+		};
+		$startGameBtn.removeEventListener('click', handlers['start-game']);
 		if (!isDocumentInFullScreenMode()) {
 			var el = document.documentElement,
 			rfs = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen;
 			rfs.call(el);
+			setTimeout(function() {
+				orentationLock('landscape-primary').then(startTheGame, function () {
+					alert('Orientation Lock Failed. Please Lock Orientation in settings');
+				})
+			}, 0);
+		} else {
+			startTheGame();
 		}
-
+	},
+	'start-game': function (event) {
+		event.preventDefault();
 		conn.send({
 			type: 'start',
 			timeStamp: event.timeStamp
@@ -110,9 +125,15 @@ var handlers = {
 
 var states = {
 	'player-setup': function (data) {
+		if (rotateLeftInterval || rotateRightInterval) {
+			clearInterval(rotateLeftInterval);
+			clearInterval(rotateRightInterval);
+		}
+		$startGame.style.display = 'none';
+		$controller.style.display = 'none';
 		$setup.style.display = 'block';
 		_.each($players, function (player) {
-			console.log('player', player);
+			console.log('player', player, data.playingPlayers);
 			$resetPlayer.removeEventListener('click', handlers['reset-player']);
 			$playerReady.removeEventListener('click', handlers['player-ready']);
 			player.removeEventListener('click', handlers['pick-player']);
@@ -127,41 +148,46 @@ var states = {
 		});
 	},
 	'game-start': function (data) {
-		orentationLock('landscape-primary').then(function() {
-			console.log('sucess');
-			$setup.style.display = 'none';
+
+			$startGame.style.display = 'none';
 			$controller.style.display = 'block';
 			$controller.style.backgroundColor = data.color;
 			document.getElementById('displayName').textContent = data.userName;
-			var rotateLeftInterval, rotateRightInterval;
+
 
 			$rotateLeft.on('press', function(event) {
-				console.log('rotateleft')
+				event.preventDefault();
 				rotateLeftInterval = setInterval(function() {
+					console.log('rotateleft')
 					conn.send({
 						type: 'rotate-left'
 					});
 				}, 100)
 
 			});
-			$rotateLeft.on('pressup', function () {
+			$rotateLeft.on('pressup', function (event) {
+				event.preventDefault();
+				console.log('rotateleft stop')
 				clearInterval(rotateLeftInterval);
 			});
 
 			$rotateRight.on('press', function(event) {
-				console.log('rotateright')
+				event.preventDefault();
 				rotateRightInterval = setInterval(function() {
+					console.log('rotateright')
 					conn.send({
 						type: 'rotate-right'
 					});
 				}, 100);
-
 			});
-			$rotateRight.on('pressup', function () {
+
+			$rotateRight.on('pressup', function (event) {
+				event.preventDefault();
+				console.log('rotateright stop')
 				clearInterval(rotateRightInterval);
 			});
 
-			$powerUp.on('press', function(event) {
+			$powerUp.on('swipeup', function(event) {
 				console.log('powerUp')
 				conn.send({
 					type: 'powerup',
@@ -184,10 +210,7 @@ var states = {
 					timeStamp: event.timeStamp
 				});
 			}, true);
-		}, function() {
-			alert('Sorry, the orientation could not be locked');
-			console.log('fail');
-		});
+
 
 	}
 }
