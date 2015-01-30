@@ -30771,7 +30771,7 @@ GameState.prototype.establishCollisionGroup = function () {
 GameState.prototype.playerHitsLand = function (player, land) {
 	console.log("player hit land", player);
 	var _this = player.game.state.states['gameState'];
-	if (!player.sprite.isDead || _this.gameOver) return;
+	if (player.sprite.isDead || _this.gameOver) return;
 	player.sprite.loseLife(function () {
 		// determine if game over
 		var winner = _.where(_this.players, {'isDead': false});
