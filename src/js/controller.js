@@ -5,6 +5,7 @@ var orentationLock = require('./utils/orentationLock');
 var $controller  = document.getElementById('controller');
 var $players     = document.querySelectorAll('#player-setup .player-box');
 var $resetPlayer = document.querySelector('#player-setup .reset-btn');
+var $playerReady = document.querySelector('#player-setup .ready-btn');
 var $setup       = document.getElementById('player-setup');
 var conn;
 var selectedPlayer = null;
@@ -93,6 +94,7 @@ var states = {
 		_.each($players, function (player) {
 			console.log('player', player);
 			$resetPlayer.removeEventListener('click', handlers['reset-player']);
+			$playerReady.removeEventListener('click', handlers['player-ready']);
 			player.removeEventListener('click', handlers['pick-player']);
 			if (_.indexOf(data.playingPlayers, player.id) === -1) {
 				player.classList.remove('selected');
@@ -100,41 +102,15 @@ var states = {
 				player.classList.add('selected');
 			}
 			$resetPlayer.addEventListener('click', handlers['reset-player']);
+			$playerReady.addEventListener('click', handlers['player-ready']);
 			player.addEventListener('click', handlers['pick-player']);
 		});
-	}
-}
-
-peer.on('open', function(id) {
-	var connectTo = null;
-	var started = false;
-	if (location.hash) connectTo = location.hash.slice(1);
-	if (!connectTo) return alert('Error: No Connection Code Supplied');
-	conn = peer.connect(connectTo);
-	if (!conn) return alert('Error: There was an error connecting to the game');
-	conn.on('open', function () {
-		conn.on('data', function (data) {
-			console.log('client recieved data', data);
-			states[data.type](data);
-		});
-		var setupController = function (event) {
-
-			$controller.removeEventListener('click', setupController, false);
-			var el = document.documentElement,
-					rfs = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen;
-			rfs.call(el);
-			var setOrentation = function () {
-				orentationLock('landscape-primary').then(function() {
-					console.log('sucess');
-				}, function() {
-					console.log('fail');
-				});
-			};
-			document.addEventListener("fullscreenchange", setOrentation);
-			document.addEventListener("mozfullscreenchange", setOrentation);
-			document.addEventListener("webkitfullscreenchange", setOrentation);
-			document.addEventListener("msfullscreenchange", setOrentation);
-
+	},
+	'game-start': function () {
+		orentationLock('landscape-primary').then(function() {
+			console.log('sucess');
+			$setup.style.display = 'none';
+			$controller.style.display = 'block';
 			window.addEventListener('click', function (event) {
 					conn.send({
 						type: 'click',
@@ -157,8 +133,26 @@ peer.on('open', function(id) {
 					timeStamp: event.timeStamp
 				});
 			}, true);
-		}
-		$controller.addEventListener('click', setupController, false);
+		}, function() {
+			alert('Sorry, the orientation could not be locked');
+			console.log('fail');
+		});
+
+	}
+}
+
+peer.on('open', function(id) {
+	var connectTo = null;
+	var started = false;
+	if (location.hash) connectTo = location.hash.slice(1);
+	if (!connectTo) return alert('Error: No Connection Code Supplied');
+	conn = peer.connect(connectTo);
+	if (!conn) return alert('Error: There was an error connecting to the game');
+	conn.on('open', function () {
+		conn.on('data', function (data) {
+			console.log('client recieved data', data);
+			states[data.type](data);
+		});
 	});
 });
 
