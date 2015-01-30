@@ -14,17 +14,26 @@
 
 .step-section {
 	width: 100%;
-	margin-top: 40px;
+	margin: 40px auto 0;
+	@include clearfix;
+}
+
+.btns {
+	margin: 30px auto 0;
 }
 
 input {
 	height: 40px;
 	width: 80%;
 	box-shadow: $drop-shadow;
+	color: $p3-accent;
+	padding: 5px;
+	box-sizing: border-box;
+	border: 2px solid #DDD;
 }
 
 .player-box {
-	width: 43%;
+	width: 45%;
 	float: left;
 	margin: 0 20px 20px 0;
 	text-align: center;
@@ -37,6 +46,10 @@ input {
 		opacity: 0.8;
 	}
 
+	&:nth-child(even) {
+		margin-right: 0;
+	}
+
 	img {
 		margin: 10px 0;
 	}
@@ -47,14 +60,5 @@ input {
 .p3 {background-color: $p3; border: 3px solid $p3-accent;}
 .p4 {background-color: $p4; border: 3px solid $p4-accent;}
 
-.reset-btn {
-	color: #FFF;
-	background-color: $p2;
-	padding: 10px;
-	text-decoration: none;
-	border: 3px solid $p2-accent;
-	display: inline-block;
-	box-shadow: $drop-shadow;
-	margin-top: 30px;
-}
+
 

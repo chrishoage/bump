@@ -2,6 +2,7 @@
 	display: inline-block;
 	letter-spacing: 2px;
 	margin: 0;
+	font-weight: 900;
 }
 
 h1 {
@@ -11,8 +12,8 @@ h1 {
 
 h2 {
 	@extend %h-type;
-	margin: 0 0 0 15px;
-	//font-size: 1em;
+	margin: 3px 0 0 15px;
+	font-size: 1.3em;
 }
 
 
