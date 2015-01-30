@@ -6,6 +6,7 @@
 }
 
 #controller {
+	@include clearfix;
 	.serif-subhead {
 		display: inline-block;
 	}
