@@ -1,0 +1,56 @@
+.step {
+	display: inline-block;
+	border-radius:(50%);
+	background-color: $p4;
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	padding-top: 2px;
+	box-sizing: border-box;
+	border: 3px solid $p4-accent;
+	vertical-align: top;
+	margin-bottom: 10px;
+}
+
+.step1, .step2 {
+	width: 100%;
+	margin-top: 20px;
+}
+
+// .step1 {
+// 	width: 40%;
+// }
+
+// .step2 {
+// 	width: 59%;
+// }
+
+input {
+	height: 40px;
+	width: 80%;
+}
+
+.player-box {
+	width: 40%;
+	float: left;
+	margin: 0 20px 20px 0;
+	text-align: center;
+	box-sizing: border-box;
+
+	img {
+		margin: 10px 0;
+	}
+}
+
+.p1 {background-color: $p1; border: 3px solid $p1-accent;}
+.p2 {background-color: $p2; border: 3px solid $p2-accent;}
+.p3 {background-color: $p3; border: 3px solid $p3-accent;}
+.p4 {background-color: $p4; border: 3px solid $p4-accent;}
+
+.reset-btn {
+	color: #FFF;
+	background-color: $p3;
+	padding: 10px;
+	text-decoration: none;
+	border: 3px solid $p3-accent;
+}
