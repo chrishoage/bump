@@ -22,7 +22,10 @@
             </div>
 
             <div class="step-section step2">
-                <span class="step">2</span><h2>Pick Your Player</h2>
+                <div class="step-text">
+                  <span class="step">2</span><h2>Pick Your Player</h2>
+                </div>
+
                 <div id="player1" class="player-box p1">
                     <h3 class="serif-subhead">player 1</h3>
                     <h2 class="skill">Anchor</h2>
@@ -52,26 +55,29 @@
         </div>
 
         <div id="start-game"  class="bump-wrap player1" style="display: none;">
-            <button class="start-btn">Start Game</button>
+          <div class="control-header">
+              <img class="bmp-logo" src="assets/images/bump-logo-128.png" alt="BUMP">
+
+          </div>
+          <p>Once all players have pressed START&nbsp;GAME, the game will begin!</p>
+          <button class="start-btn">Start Game</button>
         </div>
 
 		<div id="controller"  class="bump-wrap player1" style="display: none;">
-            <div class="control-header">
-                <img class="bmp-logo" src="assets/images/bump-logo-128.png" alt="BUMP">
-                <h3 id="displayName" class="serif-subhead">Usernamez99</h3>
-            </div>
-
-
+      <div class="control-header">
+          <img class="bmp-logo" src="assets/images/bump-logo-128.png" alt="BUMP">
+          <h3 id="displayName" class="serif-subhead">Usernamez99</h3>
+      </div>
 			<div class="btn-section">
-			    <button id="rotate-left"><img src="assets/images/control-left.png" alt="Turn left"></button>
+			    <button id="rotate-left"></button>
 			    <h2>Turn<br>Left</h2>
 			</div>
 			<div class="btn-section">
-			    <button id="power-up"><img src="assets/images/control-pwr.png" alt="Power Up"></button>
+			    <button id="power-up"></button>
 			    <h2>Power<br>Up</h2>
 			</div>
 			<div class="btn-section">
-			    <button id="rotate-right"><img src="assets/images/control-right.png" alt="Turn right"></button>
+			    <button id="rotate-right"></button>
 			    <h2>Turn<br>Right</h2>
 			</div>
 		</div>

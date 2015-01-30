@@ -18,8 +18,27 @@
 	}
 }
 
-button {
-	outline: none;
-	background: transparent;
-	border: none;
+%btn-icon-bg {
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+	min-width: 95px;
+	min-height: 95px;	
+}
+
+#rotate-right {
+	@extend %btn-icon-bg;
+	background-image: url('../images/control-right.png');
+}
+
+#rotate-left {
+	@extend %btn-icon-bg;
+	background-image: url('../images/control-left.png');
+}
+
+#power-up {
+	@extend %btn-icon-bg;
+	background-image: url('../images/control-pwr.png');
+	min-width: 105px;
+	min-height: 106px;	
 }
