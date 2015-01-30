@@ -41,7 +41,7 @@ GameState.prototype.createPlayers = function () {
 	var _this = this;
 	console.log('existing players', this.game.state.states['setupState'].players);
 	_.each(this.players, function (player, i) {
-		console.log(player);
+		console.log(player.game);
 		this.game.physics.p2.enable(player);
 		player.body.collideWorldBounds = true;
 		player.body.setCircle(32);
@@ -223,7 +223,7 @@ GameState.prototype.playerHitsLand = function (player, land) {
   	  		});
   	  		_this.gameOver = false;
   	  		console.log('restart game');
-  	  		_this.game.state.start("setupState");
+  	  		_this.game.state.start("setupState", true);
   	  	}, 3000)
   	  }
 
