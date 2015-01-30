@@ -18,6 +18,7 @@ var rotateLeftInterval, rotateRightInterval;
 
 var conn;
 var selectedPlayer = null;
+var playerIsReady = false;
 var setSize = function () {
 	$controller.style.width = window.innerWidth+'px';
 	$controller.style.height = window.innerHeight+'px';
@@ -88,6 +89,7 @@ var handlers = {
 		})
 	},
 	'player-ready': function (event) {
+		var playerIsReady = true;
 		var startTheGame = function() {
 			console.log('sucess');
 			$setup.style.display = 'none';
@@ -110,6 +112,7 @@ var handlers = {
 	},
 	'start-game': function (event) {
 		event.preventDefault();
+		playerIsReady = false;
 		conn.send({
 			type: 'start',
 			timeStamp: event.timeStamp
@@ -123,9 +126,10 @@ var states = {
 			clearInterval(rotateLeftInterval);
 			clearInterval(rotateRightInterval);
 		}
+
 		$startGame.style.display = 'none';
 		$controller.style.display = 'none';
-		$setup.style.display = 'block';
+		$setup.style.display = playerIsReady ? 'none' : 'block';
 		_.each($players, function (player) {
 			console.log('player', player, data.playingPlayers);
 			$resetPlayer.removeEventListener('click', handlers['reset-player']);
