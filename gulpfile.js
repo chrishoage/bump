@@ -34,7 +34,9 @@ gulp.task('copy', function () {
 gulp.task('scripts', function () {
   var bundler = browserify({
     cache: {}, packageCache: {}, fullPaths: false,
+    paths: ['./src/js/libs'],
     entries: [conf.entry],
+    noParse: ['./src/js/libs/p2-phaser.js'],
     debug: !isProd
   });
 

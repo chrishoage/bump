@@ -1,6 +1,7 @@
 'use strict';
 
 var Phaser = require('phaser');
+var _      = require('lodash');
 var Lake = require('../sprites/lake');
 
 function GameState (game) {
@@ -190,7 +191,7 @@ GameState.prototype.createPlayingField = function () {
 };
 
 GameState.prototype.establishCollisionGroup = function () {
-	_this = this;
+	var _this = this;
 
 	_(this.landElements).forEach(function(landElement) {
 		_(_this.players).forEach(function(player) {

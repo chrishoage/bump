@@ -2,7 +2,6 @@
 
 var Phaser = require('phaser');
 
-
 var BootState    = require('./states/boot_state');
 var PreloadState = require('./states/preload_state');
 var SetupState   = require('./states/setup_state');

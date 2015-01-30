@@ -31,7 +31,6 @@
   "dependencies": {
     "lodash": "^3.0.0",
     "peerjs": "^0.3.14",
-    "phaser": "git://github.com/notnullgames/phaser",
     "qr-js": "git://github.com/chrishoage/qr.js"
   }
 }

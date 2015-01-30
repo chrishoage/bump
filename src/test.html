@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+				<script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.1/modernizr.min.js"></script>
+    </head>
+    <body>
+    	<div id="make">make fullscreen</div>
+    	<div id="orient" style="background: #fff;">Orientated</div>
+    	<script>
+    		document.getElementById('make').addEventListener("click", function(e) {
+    		  launchFullscreen(document.getElementById('orient'));
+    		});
+    		var o = document.getElementById('orient');
+    		function launchFullscreen(element) {
+    		  if(element.requestFullscreen) {
+    		    element.requestFullscreen();
+    		  } else if(element.mozRequestFullScreen) {
+    		    element.mozRequestFullScreen();
+    		  } else if(element.webkitRequestFullscreen) {
+    		    element.webkitRequestFullscreen();
+    		  } else if(element.msRequestFullscreen) {
+    		    element.msRequestFullscreen();
+    		  }
+    		}
+
+    		function exitFullscreen() {
+    		  if(document.exitFullscreen) {
+    		    document.exitFullscreen();
+    		  } else if(document.mozCancelFullScreen) {
+    		    document.mozCancelFullScreen();
+    		  } else if(document.webkitExitFullscreen) {
+    		    document.webkitExitFullscreen();
+    		  }
+    		}
+
+    		function dumpFullscreen() {
+    		  console.log("document.fullscreenElement is: ", document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
+    		  console.log("document.fullscreenEnabled is: ", document.fullscreenEnabled || document.mozFullScreenEnabled || document.webkitFullscreenEnabled || document.msFullscreenEnabled);
+    		}
+
+    		var lockOrientation = window.screen.lockOrientation || window.screen.mozLockOrientation || window.screen.msLockOrientation;
+
+    		// Events
+    		document.addEventListener("fullscreenchange", function(e) {
+    		  console.log("fullscreenchange event! ", e);
+
+    		});
+    		document.addEventListener("mozfullscreenchange", function(e) {
+    		  console.log("mozfullscreenchange event! ", e);
+
+    		});
+    		document.addEventListener("webkitfullscreenchange", function(e) {
+    		  console.log("webkitfullscreenchange event! ", e);
+
+    		});
+    		document.addEventListener("msfullscreenchange", function(e) {
+    		  console.log("msfullscreenchange event! ", e);
+
+    		});
+    	</script>
+    </body>
+</html>
