@@ -1,5 +1,6 @@
 var peer = require('./instance/peer');
 var _    = require('lodash');
+var Hammer = require('hammerjs');
 var orentationLock = require('./utils/orentationLock');
 // I want this to fire before everything else loads
 var $controller  = document.getElementById('controller');
@@ -7,6 +8,21 @@ var $players     = document.querySelectorAll('#player-setup .player-box');
 var $resetPlayer = document.querySelector('#player-setup .reset-btn');
 var $playerReady = document.querySelector('#player-setup .ready-btn');
 var $setup       = document.getElementById('player-setup');
+var $rotateLeft = new Hammer(document.getElementById('rotate-left'));
+var $rotateRight = new Hammer(document.getElementById('rotate-right'));
+var $powerUp = new Hammer(document.getElementById('power-up'));
+
+
+$rotateLeft.add(new Hammer.Press({
+	time: 100
+}));
+$rotateRight.add(new Hammer.Press({
+	time: 100
+}));
+$powerUp.add(new Hammer.Press({
+	time: 100
+}));
+
 var conn;
 var selectedPlayer = null;
 var setSize = function () {
@@ -116,13 +132,42 @@ var states = {
 			$setup.style.display = 'none';
 			$controller.style.display = 'block';
 			$controller.style.backgroundColor = data.color;
-			document.getElementById('displayName').innerHTML = data.userName;
-			window.addEventListener('click', function (event) {
+			document.getElementById('displayName').textContent = data.userName;
+			var rotateLeftInterval, rotateRightInterval;
+
+			$rotateLeft.on('press', function(event) {
+				console.log('rotateleft')
+				rotateLeftInterval = setInterval(function() {
 					conn.send({
-						type: 'click',
-						timeStamp: event.timeStamp
+						type: 'rotate-left'
 					});
-			}, true);
+				}, 100)
+
+			});
+			$rotateLeft.on('pressup', function () {
+				clearInterval(rotateLeftInterval);
+			});
+
+			$rotateRight.on('press', function(event) {
+				console.log('rotateright')
+				rotateRightInterval = setInterval(function() {
+					conn.send({
+						type: 'rotate-right'
+					});
+				}, 100);
+
+			});
+			$rotateRight.on('pressup', function () {
+				clearInterval(rotateRightInterval);
+			});
+
+			$powerUp.on('press', function(event) {
+				console.log('powerUp')
+				conn.send({
+					type: 'powerup',
+				});
+			});
+
 			window.addEventListener('devicemotion', function(event) {
 				event.preventDefault();
 				var xyz = function (o) {

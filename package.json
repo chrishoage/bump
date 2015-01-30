@@ -32,6 +32,7 @@
     "watchify": "^2.2.1"
   },
   "dependencies": {
+    "hammerjs": "^2.0.4",
     "lodash": "^3.0.0",
     "peerjs": "^0.3.14",
     "qr-js": "git://github.com/chrishoage/qr.js"

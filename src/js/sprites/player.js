@@ -30,7 +30,8 @@ Player.prototype.setupConnection = function (connection) {
 	var _this = this;
 	this.peerConn = connection;
 	this.peerConn.on('data', function (data) {
-		if (data.type === 'click') {
+		console.log('player data', data);
+		if (data.type === 'powerup') {
 			if (_this.playerReady) {
 				_this.triggerPowerUp();
 				// trigger player power
@@ -39,12 +40,16 @@ Player.prototype.setupConnection = function (connection) {
 				_this.playerReady = true;
 		} else if (data.type === 'devicemotion') {
 			// device motion stuff here
-			_this.movePlayer(data);
+			_this.movePlayerAcel(data);
+		} else if (data.type === 'rotate-left') {
+			_this.body.rotateLeft(_this.rotationRate);
+		} else if (data.type === 'rotate-right') {
+			_this.body.rotateRight(_this.rotationRate);
 		}
 	});
 };
 
-Player.prototype.movePlayer = function (data) {
+Player.prototype.movePlayerAcel = function (data) {
 	var aig = data.accelerationIncludingGravity;
 	var accel = {
 		x: data.orientation ? aig.x : aig.y,
@@ -66,15 +71,15 @@ Player.prototype.movePlayer = function (data) {
 	var rotating = (Math.abs(accel.x) > 5);
 	if(accel.x>0 && accel.y>0) {
 	  this.body.reverse(distance);
-	  if(rotating) this.body.rotateRight(this.rotationRate)
+	  //if(rotating) this.body.rotateRight(this.rotationRate)
 	}else if(accel.x<0 && accel.y>0) {
-	  if(rotating) this.body.rotateLeft(this.rotationRate)
+	  //if(rotating) this.body.rotateLeft(this.rotationRate)
 	  this.body.reverse(distance);
 	}else if(accel.x<0 && accel.y<0) {
-	  if(rotating) this.body.rotateLeft(this.rotationRate)
+	  //if(rotating) this.body.rotateLeft(this.rotationRate)
 	  this.body.thrust(distance)
 	}else if(accel.x>0 && accel.y<0) {
-	   if(rotating) this.body.rotateRight(this.rotationRate)
+	   //if(rotating) this.body.rotateRight(this.rotationRate)
 	   this.body.thrust(distance)
 	}
 
