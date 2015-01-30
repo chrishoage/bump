@@ -4,10 +4,10 @@ body {
 	font-family: 'Lato', sans-serif;
 	text-transform: uppercase;
 	box-sizing: border-box;
+}
 
-	&.player1 {
-		background-color: $p1;
-	}
+.player1 {
+	background-color: $p1;
 }
 
 .bump-wrap {
