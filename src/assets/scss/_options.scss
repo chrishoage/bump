@@ -44,6 +44,7 @@ input {
 		filter: grayscale(70%);
 		-webkit-filter: grayscale(70%);
 		opacity: 0.8;
+		color: #DDD;
 	}
 
 	&:nth-child(odd) {
