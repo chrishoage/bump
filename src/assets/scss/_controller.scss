@@ -3,10 +3,6 @@
 	width: 33.3333%;
 	text-align: center;
 	margin: 40px 0 80px;
-
-	img {
-		outline: none;
-	}
 }
 
 #controller {
@@ -20,4 +16,10 @@
 		margin-top: 10px;
 		display: block;
 	}
+}
+
+button {
+	outline: none;
+	background: transparent;
+	border: none;
 }
