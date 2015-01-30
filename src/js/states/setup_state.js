@@ -35,6 +35,7 @@ SetupState.prototype.preload = function () {
 SetupState.prototype.create = function () {
    this.game.add.existing(new Lake(this.game));
 
+  var playingPlayers = [];
 	var playerImages = ['player1', 'player2', 'player3', 'player4'];
 	var playerObjects = [PlayerOne, PlayerTwo, PlayerThree, PlayerFour];
 
@@ -71,9 +72,32 @@ SetupState.prototype.create = function () {
    peer.on('connection', function (conn) {
 		conn.on('open', function () {
 			conn.send({
-				state: 'player-setup',
-		    availablePlayers: playerImages
+				type: 'player-setup',
+		    playingPlayers: playingPlayers
 			});
+		});
+		conn.on('data', function (data) {
+			console.log(data);
+			if (data.type === 'pick-player') {
+				var playerIndex = _.indexOf(playerImages, data.player);
+				playingPlayers.push(playerImages[playerIndex]);
+				var PlayerObject = playerObjects[playerIndex];
+				var saferect = _this.game.state.states["gameState"].safeRectangle;
+				console.log(PlayerObject, playerIndex, playerObjects, playerObjects[playerIndex]);
+				var player = new PlayerObject(_this.game, _this.game.rnd.integerInRange(saferect.left, saferect.right), _this.game.world.centerY);
+				player.playerIndex = _this.players.length;
+				player.setupConnection(conn);
+				_this.players.push(player);
+				_this.game.add.sprite(50, 120+120*_this.players.length, playerImages[playerIndex]);
+				_.each(_this.players, function (player) {
+					player.peerConn.send({
+						type: 'player-setup',
+					  playingPlayers: playingPlayers
+					});
+				});
+
+			}
+
 		});
    });
    // peer.on('connection', function (conn) {
