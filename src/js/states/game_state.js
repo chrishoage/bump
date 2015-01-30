@@ -224,6 +224,7 @@ GameState.prototype.playerHitsLand = function (player, land) {
   	  	_.each(_this.players, function (player, i) {
   	  		player.playerReady = false;
   	  	});
+  	  	_this.gameOver = false;
   	  	console.log('restart game');
   	  	_this.game.state.start("setupState");
   	  }, 3000)

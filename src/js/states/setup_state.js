@@ -86,9 +86,9 @@ SetupState.prototype.create = function () {
    		type: 'player-setup',
    	  playingPlayers: _this.playingPlayers()
    	});
-   	_.each(this.players, function (player) {
+   	_.each(this.players, function (player, i) {
    		var playerIndex = _.indexOf(this.playerImages, player.name);
-   		this.playerSprites.push(this.game.add.sprite(50, 120+120*this.players.length, this.playerImages[playerIndex]));
+   		this.playerSprites.push(this.game.add.sprite(50, 120+120*i, this.playerImages[playerIndex]));
    	}, this);
    }
 

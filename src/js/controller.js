@@ -1,6 +1,6 @@
 var peer = require('./instance/peer');
 var _    = require('lodash');
-var Hammer = require('hammerjs');
+
 var orentationLock = require('./utils/orentationLock');
 // I want this to fire before everything else loads
 var $controller   = document.getElementById('controller');
@@ -10,17 +10,11 @@ var $playerReady  = document.querySelector('#player-setup .ready-btn');
 var $startGame    = document.getElementById('start-game');
 var $startGameBtn = document.querySelector('#start-game .start-btn');
 var $setup        = document.getElementById('player-setup');
-var $rotateLeft   = new Hammer(document.getElementById('rotate-left'));
-var $rotateRight  = new Hammer(document.getElementById('rotate-right'));
-var $powerUp      = new Hammer(document.getElementById('power-up'));
+var $rotateLeft   = document.getElementById('rotate-left');
+var $rotateRight  = document.getElementById('rotate-right');
+var $powerUp      = document.getElementById('power-up');
 var rotateLeftInterval, rotateRightInterval;
 
-$rotateLeft.get('press').set({
-	time: 100
-});
-$rotateRight.get('press').set({
-	time: 100
-});
 
 var conn;
 var selectedPlayer = null;
@@ -155,39 +149,39 @@ var states = {
 			document.getElementById('displayName').textContent = data.userName;
 
 
-			$rotateLeft.on('press', function(event) {
+			$rotateLeft.addEventListener('touchstart', function(event) {
 				event.preventDefault();
+				console.log('rotateleft')
 				rotateLeftInterval = setInterval(function() {
-					console.log('rotateleft')
 					conn.send({
 						type: 'rotate-left'
 					});
 				}, 100)
 
 			});
-			$rotateLeft.on('pressup', function (event) {
+			$rotateLeft.addEventListener('touchend', function (event) {
 				event.preventDefault();
 				console.log('rotateleft stop')
 				clearInterval(rotateLeftInterval);
 			});
 
-			$rotateRight.on('press', function(event) {
+			$rotateRight.addEventListener('touchstart', function(event) {
+				console.log('rotateright')
 				event.preventDefault();
 				rotateRightInterval = setInterval(function() {
-					console.log('rotateright')
 					conn.send({
 						type: 'rotate-right'
 					});
 				}, 100);
 			});
 
-			$rotateRight.on('pressup', function (event) {
+			$rotateRight.addEventListener('touchend', function (event) {
 				event.preventDefault();
 				console.log('rotateright stop')
 				clearInterval(rotateRightInterval);
 			});
 
-			$powerUp.on('swipeup', function(event) {
+			$powerUp.addEventListener('touchend', function(event) {
 				console.log('powerUp')
 				conn.send({
 					type: 'powerup',
