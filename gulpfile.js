@@ -7,11 +7,14 @@ var source     	= require('vinyl-source-stream');
 var del        	= require('del');
 var gulpif     	= require('gulp-if');
 var gutil      	= require('gulp-util');
+var sass 			 	= require('gulp-sass');
+var sourcemaps  = require('gulp-sourcemaps');
 var runSequence = require('run-sequence');
 
 var conf = {
   src: ['**', '!assets/js{,/**}'],
   js:     ['src/js/*.js', 'src/js/**/*.js'],
+  scss: ['src/assets/scss/**/*.scss'],
   entry: './src/js/main.js',
   dist:   './target/'
 };
@@ -31,12 +34,25 @@ gulp.task('copy', function () {
     .on('error', gutil.log);
 });
 
+gulp.task('css', function () {
+  var dest = conf.dist + 'assets/css/';
+
+	return gulp.src(conf.scss)
+         .pipe(gulpif(!isProd, sourcemaps.init()))
+         .pipe(sass({
+           outputStyle: isProd ? 'compressed' : 'expanded',
+           includePaths: [require('node-bourbon').includePaths]
+         }))
+         .pipe(gulpif(!isProd, sourcemaps.write()))
+         .pipe(gulp.dest(dest))
+         .pipe(connect.reload());
+});
+
 gulp.task('scripts', function () {
   var bundler = browserify({
     cache: {}, packageCache: {}, fullPaths: false,
     paths: ['./src/js/libs'],
     entries: [conf.entry],
-    noParse: ['./src/js/libs/p2-phaser.js'],
     debug: !isProd
   });
 
@@ -73,6 +89,7 @@ gulp.task('connect', function () {
 });
 
 gulp.task('watch', function () {
+	gulp.watch(conf.scss, ['css']);
   gulp.watch('./src/**/*.{html,png,jpeg,jpg,json}', ['copy']);
  // gulp.watch(conf.js, ['scripts']);
 });
@@ -83,7 +100,7 @@ gulp.task('setdev', function () {
 
 
 gulp.task('build', function(callback) {
-  runSequence('clean', ['copy', 'scripts'], callback);
+  runSequence('clean', ['copy', 'css', 'scripts'], callback);
 });
 
 gulp.task('dev', ['setdev', 'connect', 'watch', 'build'])
