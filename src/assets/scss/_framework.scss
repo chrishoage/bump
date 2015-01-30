@@ -3,13 +3,16 @@ body {
 	background-color: $water;
 	font-family: 'Lato', sans-serif;
 	text-transform: uppercase;
-	padding: 2%;
-	width: 100%;
 	box-sizing: border-box;
 
 	&.player1 {
 		background-color: $p1;
 	}
+}
+
+.bump-wrap {
+	padding: 4%;
+	width: 100%;
 }
 
 $drop-shadow: 1px 1px 2px 0 rgba(0, 0, 0, 0.75);

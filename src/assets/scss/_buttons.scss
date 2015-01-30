@@ -1,0 +1,35 @@
+%default-button {
+	color: #FFF;
+	padding: 10px;
+	text-decoration: none;
+	display: block;
+	box-shadow: $drop-shadow;
+	text-align: center;
+	width: 80%;
+	margin: 0 auto 10px;
+
+	&:active {
+		box-shadow: -1px -1px 2px 0 rgba(0, 0, 0, 0.75);
+	}
+
+	&.selected {
+		filter: grayscale(40%);
+		-webkit-filter: grayscale(40%);
+		color: #DDD;
+	}
+}
+
+.reset-btn {
+	@extend %default-button;
+	background-color: $p2;
+	border: 3px solid $p2-accent;
+	margin-top: 30px;
+}
+
+.ready-btn {
+	@extend %default-button;
+	background-color: $p1;
+	border: 3px solid $p1-accent;
+
+	
+}
