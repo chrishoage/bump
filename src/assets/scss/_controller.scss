@@ -6,12 +6,13 @@
 }
 
 #controller {
+	@include clearfix;
 	.serif-subhead {
 		display: inline-block;
 	}
 
 	h2 {
 		margin-top: 10px;
-		display: block;	
+		display: block;
 	}
 }

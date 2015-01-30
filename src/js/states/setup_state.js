@@ -132,6 +132,7 @@ SetupState.prototype.update = function () {
 			return {
 				type: 'game-start',
 				playerName: player.name,
+				userName: player.userName,
 				color: '#'+player.barColor.toString(16)
 			}
 		});

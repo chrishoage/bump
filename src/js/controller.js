@@ -16,6 +16,10 @@ var setSize = function () {
 	//$setup.style.height = window.innerWidth+'px';
 }
 
+document.querySelector('form').addEventListener('submit', function (event) {
+	event.preventDefault();
+}, true);
+
 console.log('hello from controller.js');
 
 function getUserName () {
@@ -106,11 +110,13 @@ var states = {
 			player.addEventListener('click', handlers['pick-player']);
 		});
 	},
-	'game-start': function () {
+	'game-start': function (data) {
 		orentationLock('landscape-primary').then(function() {
 			console.log('sucess');
 			$setup.style.display = 'none';
 			$controller.style.display = 'block';
+			$controller.style.backgroundColor = data.color;
+			document.getElementById('displayName').innerHTML = data.userName;
 			window.addEventListener('click', function (event) {
 					conn.send({
 						type: 'click',
