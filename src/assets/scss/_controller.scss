@@ -2,11 +2,16 @@
 	float: left;
 	width: 33.3333%;
 	text-align: center;
-	margin-top: 40px;
+	margin: 40px 0 80px;
+
+	img {
+		outline: none;
+	}
 }
 
 #controller {
 	@include clearfix;
+
 	.serif-subhead {
 		display: inline-block;
 	}
