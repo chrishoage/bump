@@ -10,9 +10,10 @@ var gutil      	= require('gulp-util');
 var sass 			 	= require('gulp-sass');
 var sourcemaps  = require('gulp-sourcemaps');
 var runSequence = require('run-sequence');
+var deploy = require('gulp-gh-pages');
 
 var conf = {
-  src: ['**', '!assets/js{,/**}'],
+  src: ['**', '!js{,/**}', '!assets/scss{,/**}'],
   js:     ['src/js/*.js', 'src/js/**/*.js'],
   scss: ['src/assets/scss/**/*.scss'],
   entry: './src/js/main.js',
@@ -20,6 +21,11 @@ var conf = {
 };
 
 var isProd = true;
+
+gulp.task('deploy', function () {
+    return gulp.src(conf.dist + '**/*')
+        .pipe(deploy());
+});
 
 gulp.task('clean', function () {
 	return gulp.src(conf.dist)
