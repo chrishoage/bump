@@ -7,7 +7,7 @@ function Player (game, x, y, asset, frame) {
 	y = y || game.world.centerY;
   Phaser.Sprite.call(this, game, x, y, asset+'-sprite', frame);
 	this.name = asset;
-	console.log(this.name)
+	console.log('Player Constructor Called', this.name, game)
   this.animations.add('kick',[0,1,2],6,true);
   this.play('kick')
   this.playerReady = false;
@@ -28,8 +28,8 @@ Player.prototype.constructor = Player;
 
 Player.prototype.setupConnection = function (connection) {
 	var _this = this;
-	connection.player = this;
 	this.peerConn = connection;
+	this.peerConn.player = this;
 	this.peerConn.on('data', function (data) {
 
 		if (data.type === 'powerup') {

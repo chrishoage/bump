@@ -30,6 +30,7 @@ SetupState.prototype.preload = function () {
 		     value:'http://' + location.host + location.pathname + '#' + peer.id,
 		      size:100
 		    });
+		console.log('http://' + location.host + location.pathname + '#' + peer.id);
 		var data = new Image();
 		data.src = dataURI;
 		this.game.cache.addImage('qr-code', dataURI, data);
@@ -44,6 +45,17 @@ SetupState.prototype.sendToPlayers = function (payload) {
 
 SetupState.prototype.playingPlayers = function() {
 	return _.map(this.players, function(player) { return player.name});
+};
+
+SetupState.prototype.pickPlayer = function(playerName, userName, connection) {
+	var PlayerObject = this.playerObjects[playerName];
+	var saferect = this.game.state.states["gameState"].safeRectangle;
+	var player = new PlayerObject(this.game, this.game.rnd.integerInRange(saferect.left, saferect.right), this.game.world.centerY);
+	player.playerIndex = this.players.length;
+	player.setupConnection(connection);
+	player.userName = data.userName;
+	this.players.push(player);
+	this.playerSprites[playerName] = this.game.add.sprite(50, 120+120*this.players.length, playerName);
 };
 
 SetupState.prototype.create = function () {
@@ -87,8 +99,24 @@ SetupState.prototype.create = function () {
    this.game.add.tween(qrSprite).to({alpha:1}, 2000, Phaser.Easing.Linear.None, 1800);
 
    var _this = this;
-
-   if (this.players) {
+   // if (this.players.length) {
+   // 	console.log('p1', this.players);
+   // 	//var palyersLength = this.players.length;
+   // 	this.sendToPlayers({
+   // 		type: 'player-setup',
+   // 	  playingPlayers: _this.playingPlayers()
+   // 	});
+   // 	_.each(this.players, function (player, i) {
+   // 		var userName = player.userName;
+   // 		var playerName = player.name;
+   // 		var pConn = player.peerConn;
+   // 		_.remove(this.players, player);
+   // 		this.pickPlayer(playerName, userName, pConn);
+   // 	}, this);
+   // 	console.log('p2',this.players);
+   // }
+   if (this.players.length) {
+   	//var palyersLength = this.players.length;
    	this.sendToPlayers({
    		type: 'player-setup',
    	  playingPlayers: _this.playingPlayers()
@@ -156,6 +184,7 @@ SetupState.prototype.create = function () {
 SetupState.prototype.update = function () {
 	if (this.players.length && _.every(this.players, 'playerReady')) {
 		this.sendToPlayers(function (player) {
+			console.log('gameStart', player);
 			return {
 				type: 'game-start',
 				playerName: player.name,

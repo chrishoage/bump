@@ -31,7 +31,7 @@ GameState.prototype.create = function () {
   this.game.physics.p2.defaultRestitution = 0.8;
   this.game.physics.p2.applyGravity = false;
 
-  this.players = this.game.state.states['setupState'].players;
+  this.players = _.clone(this.game.state.states['setupState'].players);
 	this.createPlayingField();
 	this.createPlayers();
 	this.establishCollisionGroup();
@@ -39,9 +39,10 @@ GameState.prototype.create = function () {
 
 GameState.prototype.createPlayers = function () {
 	var _this = this;
-	console.log('existing players', this.game.state.states['setupState'].players);
+	//console.log('existing players', this.players, this.game.state.states['setupState'].players, this.game, this.players[0].game, this.game.state.states['setupState'].players[0].game);
+	console.log('existing player', this.players);
 	_.each(this.players, function (player, i) {
-		console.log(player.game);
+		console.log(player, player.game);
 		this.game.physics.p2.enable(player);
 		player.body.collideWorldBounds = true;
 		player.body.setCircle(32);
@@ -205,7 +206,7 @@ GameState.prototype.establishCollisionGroup = function () {
 GameState.prototype.playerHitsLand = function (player, land) {
 	console.log("player hit land", player);
 	var _this = player.game.state.states['gameState'];
-	if (player.sprite.isDead || _this.gameOver) return;
+	if (!player.sprite.isDead || _this.gameOver) return;
 	player.sprite.loseLife(function () {
 		// determine if game over
 		var winner = _.where(_this.players, {'isDead': false});
@@ -220,10 +221,11 @@ GameState.prototype.playerHitsLand = function (player, land) {
   	  	setTimeout(function() {
   	  		_.each(_this.players, function (player, i) {
   	  			player.playerReady = false;
+
   	  		});
   	  		_this.gameOver = false;
   	  		console.log('restart game');
-  	  		_this.game.state.start("setupState", true);
+  	  		_this.game.state.start("setupState", false, false);
   	  	}, 3000)
   	  }
 
