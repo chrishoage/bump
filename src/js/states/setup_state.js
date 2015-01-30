@@ -35,6 +35,7 @@ SetupState.prototype.preload = function () {
 SetupState.prototype.create = function () {
    this.game.add.existing(new Lake(this.game));
 
+  var playerSprites = [];
   var playingPlayers = [];
 	var playerImages = ['player1', 'player2', 'player3', 'player4'];
 	var playerObjects = [PlayerOne, PlayerTwo, PlayerThree, PlayerFour];
@@ -87,8 +88,10 @@ SetupState.prototype.create = function () {
 				var player = new PlayerObject(_this.game, _this.game.rnd.integerInRange(saferect.left, saferect.right), _this.game.world.centerY);
 				player.playerIndex = _this.players.length;
 				player.setupConnection(conn);
+				player.playerName = data.player;
+				player.userName = data.userName;
 				_this.players.push(player);
-				_this.game.add.sprite(50, 120+120*_this.players.length, playerImages[playerIndex]);
+				playerSprites.push(_this.game.add.sprite(50, 120+120*_this.players.length, playerImages[playerIndex]));
 				_.each(_this.players, function (player) {
 					player.peerConn.send({
 						type: 'player-setup',
@@ -96,6 +99,21 @@ SetupState.prototype.create = function () {
 					});
 				});
 
+			}
+
+			if (data.type === 'unpick-player') {
+				var playerIndex = _.indexOf(playingPlayers, data.player);
+				_.pullAt(playingPlayers, playerIndex);
+				var sprite = _.pullAt(playerSprites, playerIndex);
+				console.log('unpick-player', playerIndex, sprite);
+				sprite[0].destroy();
+				_.each(_this.players, function (player) {
+					player.peerConn.send({
+						type: 'player-setup',
+					  playingPlayers: playingPlayers
+					});
+				});
+				_.pullAt(_this.players, playerIndex);
 			}
 
 		});

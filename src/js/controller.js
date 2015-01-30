@@ -2,9 +2,10 @@ var peer = require('./instance/peer');
 var _    = require('lodash');
 var orentationLock = require('./utils/orentationLock');
 // I want this to fire before everything else loads
-var $controller = document.getElementById('controller');
-var $players    = document.querySelectorAll('#player-setup .player-box');
-var $setup      = document.getElementById('player-setup');
+var $controller  = document.getElementById('controller');
+var $players     = document.querySelectorAll('#player-setup .player-box');
+var $resetPlayer = document.querySelector('#player-setup .reset-btn');
+var $setup       = document.getElementById('player-setup');
 var conn;
 var selectedPlayer = null;
 var setSize = function () {
@@ -16,6 +17,16 @@ var setSize = function () {
 
 console.log('hello from controller.js');
 
+function getUserName () {
+	return document.getElementById('username').value;
+}
+
+function isDocumentInFullScreenMode() {
+  // Note that the browser fullscreen (triggered by short keys) might
+  // be considered different from content fullscreen when expecting a boolean
+  return ((document.fullscreenElement && document.fullscreenElement !== null) ||    // alternative standard methods
+      document.mozFullScreen || document.webkitIsFullScreen);                   // current working methods
+}
 
 
 var $body = document.body;
@@ -41,8 +52,16 @@ var orientation = function () {
 
 	return o;
 };
-
+//		document.querySelector('.reset-btn').
 var handlers = {
+	'reset-player': function (event) {
+		event.preventDefault();
+		conn.send({
+			type: 'unpick-player',
+			player: selectedPlayer
+		});
+		selectedPlayer = null;
+	},
 	'pick-player': function () {
 		if (selectedPlayer) return;
 		var player = this.id;
@@ -50,8 +69,21 @@ var handlers = {
 		selectedPlayer = player;
 		conn.send({
 			type: 'pick-player',
-			player: player
+			player: player,
+			userName: getUserName()
 		})
+	},
+	'player-ready': function (event) {
+		if (!isDocumentInFullScreenMode()) {
+			var el = document.documentElement,
+			rfs = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen;
+			rfs.call(el);
+		}
+
+		conn.send({
+			type: 'start',
+			timeStamp: event.timeStamp
+		});
 	}
 }
 
@@ -60,12 +92,14 @@ var states = {
 		$setup.style.display = 'block';
 		_.each($players, function (player) {
 			console.log('player', player);
+			$resetPlayer.removeEventListener('click', handlers['reset-player']);
 			player.removeEventListener('click', handlers['pick-player']);
 			if (_.indexOf(data.playingPlayers, player.id) === -1) {
 				player.classList.remove('selected');
 			} else {
 				player.classList.add('selected');
 			}
+			$resetPlayer.addEventListener('click', handlers['reset-player']);
 			player.addEventListener('click', handlers['pick-player']);
 		});
 	}
@@ -100,10 +134,7 @@ peer.on('open', function(id) {
 			document.addEventListener("mozfullscreenchange", setOrentation);
 			document.addEventListener("webkitfullscreenchange", setOrentation);
 			document.addEventListener("msfullscreenchange", setOrentation);
-			conn.send({
-				type: 'start',
-				timeStamp: event.timeStamp
-			});
+
 			window.addEventListener('click', function (event) {
 					conn.send({
 						type: 'click',
