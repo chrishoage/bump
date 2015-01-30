@@ -3,8 +3,10 @@ var _    = require('lodash');
 var orentationLock = require('./utils/orentationLock');
 // I want this to fire before everything else loads
 var $controller = document.getElementById('controller');
-var $setup = document.getElementById('player-setup');
-
+var $players    = document.querySelectorAll('#player-setup .player-box');
+var $setup      = document.getElementById('player-setup');
+var conn;
+var selectedPlayer = null;
 var setSize = function () {
 	$controller.style.width = window.innerWidth+'px';
 	$controller.style.height = window.innerHeight+'px';
@@ -40,9 +42,32 @@ var orientation = function () {
 	return o;
 };
 
+var handlers = {
+	'pick-player': function () {
+		if (selectedPlayer) return;
+		var player = this.id;
+		console.log('clicked player', player);
+		selectedPlayer = player;
+		conn.send({
+			type: 'pick-player',
+			player: player
+		})
+	}
+}
+
 var states = {
 	'player-setup': function (data) {
 		$setup.style.display = 'block';
+		_.each($players, function (player) {
+			console.log('player', player);
+			player.removeEventListener('click', handlers['pick-player']);
+			if (_.indexOf(data.playingPlayers, player.id) === -1) {
+				player.classList.remove('selected');
+			} else {
+				player.classList.add('selected');
+			}
+			player.addEventListener('click', handlers['pick-player']);
+		});
 	}
 }
 
@@ -51,11 +76,12 @@ peer.on('open', function(id) {
 	var started = false;
 	if (location.hash) connectTo = location.hash.slice(1);
 	if (!connectTo) return alert('Error: No Connection Code Supplied');
-	var conn = peer.connect(connectTo);
+	conn = peer.connect(connectTo);
 	if (!conn) return alert('Error: There was an error connecting to the game');
 	conn.on('open', function () {
 		conn.on('data', function (data) {
-
+			console.log('client recieved data', data);
+			states[data.type](data);
 		});
 		var setupController = function (event) {
 
