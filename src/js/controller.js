@@ -78,7 +78,7 @@ var handlers = {
 		selectedPlayer = null;
 	},
 	'pick-player': function () {
-		if (selectedPlayer) return;
+		if (selectedPlayer || this.classList.contains('selected')) return;
 		var player = this.id;
 		console.log('clicked player', player);
 		selectedPlayer = player;
@@ -89,7 +89,7 @@ var handlers = {
 		})
 	},
 	'player-ready': function (event) {
-		var playerIsReady = true;
+		playerIsReady = true;
 		var startTheGame = function() {
 			console.log('sucess');
 			$setup.style.display = 'none';
@@ -112,7 +112,7 @@ var handlers = {
 	},
 	'start-game': function (event) {
 		event.preventDefault();
-		playerIsReady = false;
+
 		conn.send({
 			type: 'start',
 			timeStamp: event.timeStamp
@@ -127,9 +127,10 @@ var states = {
 			clearInterval(rotateRightInterval);
 		}
 
-		$startGame.style.display = 'none';
+		$startGame.style.display = playerIsReady ? 'block': 'none';
 		$controller.style.display = 'none';
 		$setup.style.display = playerIsReady ? 'none' : 'block';
+		console.log('player-setup', playerIsReady)
 		_.each($players, function (player) {
 			console.log('player', player, data.playingPlayers);
 			$resetPlayer.removeEventListener('click', handlers['reset-player']);
@@ -146,7 +147,7 @@ var states = {
 		});
 	},
 	'game-start': function (data) {
-
+			playerIsReady = false;
 			$startGame.style.display = 'none';
 			$controller.style.display = 'block';
 			$controller.style.backgroundColor = data.color;
@@ -218,12 +219,16 @@ peer.on('open', function(id) {
 	var started = false;
 	if (location.hash) connectTo = location.hash.slice(1);
 	if (!connectTo) return alert('Error: No Connection Code Supplied');
-	conn = peer.connect(connectTo);
+	conn = peer.connect(connectTo, {reliable: true});
 	if (!conn) return alert('Error: There was an error connecting to the game');
 	conn.on('open', function () {
 		conn.on('data', function (data) {
 			console.log('client recieved data', data);
 			states[data.type](data);
+		});
+		window.addEventListener('unload', function () {
+			conn.close();
+			peer.destroy();
 		});
 	});
 });

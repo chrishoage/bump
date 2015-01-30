@@ -11,6 +11,7 @@ function PlayerTwo (game, x, y, asset, frame) {
   Player.call(this, game, x, y, asset, frame);
   this.thrusted = false
   this.barColor = 0x65BF85;
+  this.color = '#65BF85';
 }
 
 PlayerTwo.prototype = Object.create(Player.prototype);

@@ -12,6 +12,7 @@ function PlayerFour (game, x, y, asset, frame) {
 
   this.mushroomed = false;
   this.barColor = 0xD91919;
+  this.color = '#D91919';
 
 }
 

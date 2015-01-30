@@ -11,7 +11,7 @@ var PlayerThree = function(game, x, y, asset, frame) {
   Player.call(this, game, x, y, asset, frame);
   this.teleported = false;
   this.barColor = 0x000000;
-
+  this.color = '#000000';
 }
 
 PlayerThree.prototype = Object.create(Player.prototype);

@@ -217,17 +217,18 @@ GameState.prototype.playerHitsLand = function (player, land) {
   	  if(winner.length == 1) {
   	  	_this.game.add.tween(winner[0].scale).to({ x: 2, y: 2}, 500, Phaser.Easing.Back.Out, true, 0, false, false)
   	  	_this.game.world.bringToTop(winner[0]);
+  	  	setTimeout(function() {
+  	  		_.each(_this.players, function (player, i) {
+  	  			player.playerReady = false;
+  	  		});
+  	  		_this.gameOver = false;
+  	  		console.log('restart game');
+  	  		_this.game.state.start("setupState");
+  	  	}, 3000)
   	  }
 
   	  player.game.add.tween(gameover).from({y:-600},1000,Phaser.Easing.Bounce.Out,true, 100, false, false);
-  	  setTimeout(function() {
-  	  	_.each(_this.players, function (player, i) {
-  	  		player.playerReady = false;
-  	  	});
-  	  	_this.gameOver = false;
-  	  	console.log('restart game');
-  	  	_this.game.state.start("setupState");
-  	  }, 3000)
+
 		}
 	});
 

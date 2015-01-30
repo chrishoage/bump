@@ -12,9 +12,12 @@ var PlayerOne   = require('../sprites/player_one'),
 		PlayerThree = require('../sprites/player_three'),
 		PlayerFour  = require('../sprites/player_four');
 
+
+var playerConnections = [];
+
 function SetupState (game, x, y, asset, frame) {
-   this.lake = null;
-   this.players = this.players || [];
+  this.lake = null;
+  this.players = this.players || [];
 
   Phaser.State.call(this, game);
 }
@@ -34,8 +37,8 @@ SetupState.prototype.preload = function () {
 
 SetupState.prototype.sendToPlayers = function (payload) {
 	var b = typeof payload === 'function';
-	_.each(this.players, function (player) {
-		player.peerConn.send(b ? payload(player) : payload);
+	_.each(playerConnections, function (conn) {
+		conn.send(b ? payload(conn.player) : payload);
 	});
 }
 
@@ -44,11 +47,15 @@ SetupState.prototype.playingPlayers = function() {
 };
 
 SetupState.prototype.create = function () {
-   this.game.add.existing(new Lake(this.game));
+  this.game.add.existing(new Lake(this.game));
 
-  this.playerSprites = [];
-	this.playerImages = ['player1', 'player2', 'player3', 'player4'];
-	this.playerObjects = [PlayerOne, PlayerTwo, PlayerThree, PlayerFour];
+	this.playerSprites = {};
+	this.playerObjects = {
+		player1: PlayerOne,
+		player2: PlayerTwo,
+		player3: PlayerThree,
+		player4: PlayerFour
+	}
 
    var style = { font: "65px Arial", fill: "#cf2127", align: "center" };
    var smallStyle = { font: "20px Arial", fill: "#fff", align: "center" };
@@ -87,13 +94,13 @@ SetupState.prototype.create = function () {
    	  playingPlayers: _this.playingPlayers()
    	});
    	_.each(this.players, function (player, i) {
-   		var playerIndex = _.indexOf(this.playerImages, player.name);
-   		this.playerSprites.push(this.game.add.sprite(50, 120+120*i, this.playerImages[playerIndex]));
+   		this.playerSprites[player.name] = this.game.add.sprite(50, 120+120*i, player.name);
    	}, this);
    }
 
    peer.on('connection', function (conn) {
 		conn.on('open', function () {
+			playerConnections.push(conn);
 			conn.send({
 				type: 'player-setup',
 		    playingPlayers: _this.playingPlayers()
@@ -101,16 +108,15 @@ SetupState.prototype.create = function () {
 		});
 		conn.on('data', function (data) {
 			if (data.type === 'pick-player') {
-				var playerIndex = _.indexOf(_this.playerImages, data.player);
-				var PlayerObject = _this.playerObjects[playerIndex];
+				var PlayerObject = _this.playerObjects[data.player];
 				var saferect = _this.game.state.states["gameState"].safeRectangle;
-				console.log(PlayerObject, playerIndex, _this.playerObjects, _this.playerObjects[playerIndex]);
+				console.log('PlayerObject', _this.game);
 				var player = new PlayerObject(_this.game, _this.game.rnd.integerInRange(saferect.left, saferect.right), _this.game.world.centerY);
 				player.playerIndex = _this.players.length;
 				player.setupConnection(conn);
 				player.userName = data.userName;
 				_this.players.push(player);
-				_this.playerSprites.push(_this.game.add.sprite(50, 120+120*_this.players.length, _this.playerImages[playerIndex]));
+				_this.playerSprites[player.name] = _this.game.add.sprite(50, 120+120*_this.players.length, data.player);
 				_this.sendToPlayers({
 					type: 'player-setup',
 				  playingPlayers: _this.playingPlayers()
@@ -119,18 +125,26 @@ SetupState.prototype.create = function () {
 			}
 
 			if (data.type === 'unpick-player') {
-				var playerIndex = _.indexOf(_this.playingPlayers(), data.player);
-				var sprite = _.pullAt(_this.playerSprites, playerIndex);
-				console.log('unpick-player', playerIndex, sprite);
-				sprite[0].destroy();
+				_this.playerSprites[data.player].destroy();
+				delete _this.playerSprites[data.player];
+				console.log('unpick-player', data);
 				_this.sendToPlayers({
 					type: 'player-setup',
 				  playingPlayers: _.without(_this.playingPlayers(), data.player)
 				});
-				_.pullAt(_this.players, playerIndex);
+				_.remove(_this.players, {name: data.player});
 			}
 
 		});
+
+		conn.on('close', function () {
+			var p = _.remove(_this.players, {peerConn: conn})[0];
+			console.log('conn close', p, _this.playerSprites);
+			_this.playerSprites[p.name].destroy();
+			delete _this.playerSprites[p.name];
+			_.remove(playerConnections, conn);
+		});
+
    });
 
    // full screen on click
@@ -146,7 +160,7 @@ SetupState.prototype.update = function () {
 				type: 'game-start',
 				playerName: player.name,
 				userName: player.userName,
-				color: '#'+player.barColor.toString(16)
+				color: player.color
 			}
 		});
 		_.each(this.playerSprites, function (sprite) {

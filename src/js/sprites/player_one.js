@@ -10,6 +10,8 @@ function PlayerOne (game, x, y, asset, frame) {
 	asset = asset || 'player1';
   Player.call(this, game, x, y, asset, frame);
   this.barColor = 0xFBB03B;
+  this.color = '#FBB03B';
+
 }
 
 PlayerOne.prototype = Object.create(Player.prototype);

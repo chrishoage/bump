@@ -28,6 +28,7 @@ Player.prototype.constructor = Player;
 
 Player.prototype.setupConnection = function (connection) {
 	var _this = this;
+	connection.player = this;
 	this.peerConn = connection;
 	this.peerConn.on('data', function (data) {
 
@@ -50,10 +51,8 @@ Player.prototype.movePlayer = function (data) {
 
 	if (data.type === 'rotate-left') {
 		this.body.rotateLeft(this.rotationRate);
-		console.log('rotate left')
 	} else if (data.type === 'rotate-right') {
 		this.body.rotateRight(this.rotationRate);
-		console.log('rotate right')
 	} else if (data.type === 'devicemotion') {
 		//logic to calculate the tilt value of the accelerometer (0-10)
 		var aig = data.accelerationIncludingGravity;
