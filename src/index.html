@@ -6,9 +6,45 @@
         <title></title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="assets/css/main.css">
+        <link href='http://fonts.googleapis.com/css?family=Lato:400,900' rel='stylesheet' type='text/css'>
 				<script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.1/modernizr.min.js"></script>
     </head>
     <body>
+    <div id="player-setup" style="display: none;">
+        <img src="assets/images/bump-logo-128.png" alt="BUMP"><h1>Player Options</h1>
+        <div class="step1">
+            <span class="step">1</span><h2>Enter Username</h2>
+            <form action="">
+                <input type="text" name="username" placeholder="Username">
+            </form>
+            <!-- <a href="#" class="reset-btn">Reset Player Choice</a> -->
+        </div>
+        <div class="step2">
+            <span class="step">2</span><h2>Pick Your Player</h2>
+            <div id="player1" class="player-box p1">
+                <h3 class="playernum">player 1</h3>
+                <h2 class="skill">Anchor</h2>
+                <img src="assets/images/player-p1.png" alt="p1">
+            </div>
+            <div id="player2" class="player-box p2">
+                <h3 class="playernum">player 2</h3>
+                <h2 class="skill">Boost</h2>
+                <img src="assets/images/player-p2.png" alt="p2">
+            </div>
+            <div id="player3" class="player-box p3">
+                <h3 class="playernum">player 3</h3>
+                <h2 class="skill">Teleport</h2>
+                <img src="assets/images/player-p3.png" alt="p3">
+            </div>
+            <div id="player4" class="player-box p4">
+                <h3 class="playernum">player 4</h3>
+                <h2 class="skill">Grow</h2>
+                <img src="assets/images/player-p4.png" alt="p4">
+            </div>
+        </div>
+
+    </div>
     <script src="//cdnjs.cloudflare.com/ajax/libs/phaser/2.2.2/phaser.min.js"></script>
 		<script src="js/bundle.js"></script>
     </body>

@@ -24,7 +24,7 @@ SetupState.prototype.constructor = SetupState;
 
 SetupState.prototype.preload = function () {
 		var dataURI = qr.toDataURL({
-		     value:'http://' + location.host + location.pathname + 'controller.html#' + peer.id,
+		     value:'http://' + location.host + location.pathname + '#' + peer.id,
 		      size:100
 		    });
 		var data = new Image();
@@ -69,21 +69,29 @@ SetupState.prototype.create = function () {
 
    var _this = this;
    peer.on('connection', function (conn) {
-   	var PlayerObject = playerObjects.shift();
-   	var saferect = _this.game.state.states["gameState"].safeRectangle;
-   	var player = new PlayerObject(_this.game, _this.game.rnd.integerInRange(saferect.left, saferect.right), _this.game.world.centerY);
-   	console.log(player);
-   	player.playerIndex = _this.players.length;
-   	player.setupConnection(conn);
-   	_this.players.push(player);
-   	_this.game.add.sprite(50, 120+120*_this.players.length, playerImages.shift());
-   	conn.on('open', function () {
-   		conn.send({
-         playerName: player.name,
-   			color: '#'+player.barColor.toString(16)
-   		})
-   	})
+		conn.on('open', function () {
+			conn.send({
+				state: 'player-setup',
+		    availablePlayers: playerImages
+			});
+		});
    });
+   // peer.on('connection', function (conn) {
+   // 	var PlayerObject = playerObjects.shift();
+   // 	var saferect = _this.game.state.states["gameState"].safeRectangle;
+   // 	var player = new PlayerObject(_this.game, _this.game.rnd.integerInRange(saferect.left, saferect.right), _this.game.world.centerY);
+   // 	console.log(player);
+   // 	player.playerIndex = _this.players.length;
+   // 	player.setupConnection(conn);
+   // 	_this.players.push(player);
+   // 	_this.game.add.sprite(50, 120+120*_this.players.length, playerImages.shift());
+   // 	conn.on('open', function () {
+   // 		conn.send({
+   //       playerName: player.name,
+   // 			color: '#'+player.barColor.toString(16)
+   // 		})
+   // 	})
+   // });
 
    // full screen on click
    this.game.input.onDown.add(function() {

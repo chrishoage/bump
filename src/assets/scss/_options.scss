@@ -37,6 +37,10 @@ input {
 	text-align: center;
 	box-sizing: border-box;
 
+	&.selected {
+		opacity: 0.3;
+	}
+
 	img {
 		margin: 10px 0;
 	}
@@ -52,6 +56,11 @@ input {
 	background-color: $p2;
 	padding: 10px;
 	text-decoration: none;
+<<<<<<< HEAD
 	border: 3px solid $p2-accent;
 	display: inline-block;
 }
+=======
+	border: 3px solid $p3-accent;
+}
+>>>>>>> 7202bde124dfacaeaab9efd25c3c0999afdc1f0b
